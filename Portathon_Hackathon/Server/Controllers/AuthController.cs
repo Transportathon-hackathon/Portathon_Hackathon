@@ -7,8 +7,9 @@ using Portathon_Hackathon.Shared.Model;
 
 namespace Portathon_Hackathon.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+
     public class AuthController : ControllerBase
     {
         private readonly IUserService _authService;
@@ -22,7 +23,7 @@ namespace Portathon_Hackathon.Server.Controllers
         {
             var result = await _authService.Register(new User
             {
-                UserType = user.UserType.ToString(),
+                //UserType = user.UserType.ToString(),
                 Email = user.Email,
                 Username = user.Username,
 

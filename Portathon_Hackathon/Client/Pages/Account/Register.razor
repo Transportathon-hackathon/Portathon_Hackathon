@@ -1,0 +1,121 @@
+﻿@page "/Account/Register"
+@using Portathon_Hackathon.Client.Services.Abstract;
+@using Portathon_Hackathon.Shared.Entities;
+@inject IAuthManager _authManager
+@inject NavigationManager _navigationManager
+
+@*
+ [Required(ErrorMessage = "Email alanı gereklidir"), EmailAddress]
+        public string Email { get; set; }
+        [Required(ErrorMessage = "Kullanıcı adı gereklidir"), EmailAddress]
+        public string Username { get; set; }
+
+        [Required, StringLength(100, MinimumLength = 6)]
+        public string Password { get; set; }
+        [Compare("Password", ErrorMessage = "pasword do not match")]
+        public string ConfirmPassword { get; set; }
+        public UserTypes UserType { get; set; }*@
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Logo or Image -->
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <!-- Logo or Image -->
+                        <div class="text-center mb-5">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" alt="Company Logo" class="img-fluid" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <EditForm Model="user" OnValidSubmit="HandleRegistration">
+                <!-- Name input -->
+                <div class="form-group">
+                    <label for="Email" class="form-label">Email</label>
+                    <InputText type="text" id="registerName" @bind-Value="user.Email" class="form-control" />
+                </div>
+
+                <!-- Username input -->
+                <div class="form-group">
+                    <label for="registerUsername" class="form-label">Username</label>
+                    <InputText type="text" id="registerUsername" @bind-Value="user.Username" class="form-control" />
+                </div>
+
+                <!-- Password input -->
+                <div class="form-group">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <InputText type="password" id="registerPassword" @bind-Value="user.Password" class="form-control" />
+                </div>
+              
+                <!-- Repeat Password input -->
+                <div class="form-group">
+                    <label for="registerRepeatPassword" class="form-label">Repeat password</label>
+                    <InputText type="password" id="registerRepeatPassword" @bind-Value="user.ConfirmPassword" class="form-control" />
+                </div>
+                <InputSelect class="form-control" @bind-Value="selectedUserType">
+                    <option value="0">User</option>
+                    <option value="1">Company</option>
+                </InputSelect>
+                <!-- Checkbox -->
+                <div class="form-check d-flex justify-content-center mb-4">
+                    <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
+                           aria-describedby="registerCheckHelpText" />
+                    <label class="form-check-label" for="registerCheck">
+                        I have read and agree to the terms
+                    </label>
+                </div>
+
+                <!-- Submit button -->
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary btn-block mb-3">Sign Up</button>
+                    <p>Are you already a member? <a href="login">Sign in</a></p>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+    UserRegister user = new UserRegister();
+
+    string message = string.Empty;
+    string messageCssClass = string.Empty;
+    private int selectedUserType;
+    private async Task HandleRegistration()
+    {
+        int userTypeValue = GetSelectedUserTypeAsInt();
+        var result = await _authManager.Register(user);
+        if (result.Success == false)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            _navigationManager.NavigateTo("login");
+
+        }
+        if (!result.Success)
+        {
+            messageCssClass = "text-success";
+        }
+        else
+        {
+            messageCssClass = "text-danger";
+        }
+    }   
+    private int GetSelectedUserTypeAsInt()
+    {
+        return selectedUserType;
+    }
+   
+}

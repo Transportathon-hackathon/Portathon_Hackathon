@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portathon_Hackathon.Server", "Portathon_Hackathon\Server\Portathon_Hackathon.Server.csproj", "{338AB2D4-37D1-482E-9C67-E152460F14C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portathon_Hackathon.Server", "Portathon_Hackathon\Server\Portathon_Hackathon.Server.csproj", "{338AB2D4-37D1-482E-9C67-E152460F14C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portathon_Hackathon.Client", "Portathon_Hackathon\Client\Portathon_Hackathon.Client.csproj", "{5756BE0A-3DEE-428D-BFFE-1D654F8312B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portathon_Hackathon.Client", "Portathon_Hackathon\Client\Portathon_Hackathon.Client.csproj", "{5756BE0A-3DEE-428D-BFFE-1D654F8312B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portathon_Hackathon.Shared", "Portathon_Hackathon\Shared\Portathon_Hackathon.Shared.csproj", "{7344E8E4-6CE1-4B3A-B375-9A0843CBE3C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portathon_Hackathon.Shared", "Portathon_Hackathon\Shared\Portathon_Hackathon.Shared.csproj", "{7344E8E4-6CE1-4B3A-B375-9A0843CBE3C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

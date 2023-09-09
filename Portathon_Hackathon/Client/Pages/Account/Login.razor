@@ -1,0 +1,82 @@
+﻿@page "/Account/Login"
+
+@inject IAuthManager _authManager
+@inject NavigationManager _navigationManager
+@inject ILocalStorageService _localStorage
+@inject AuthenticationStateProvider _authenticationStateProvider
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Logo or Image -->
+            <div class="text-center mb-4">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" alt="Company Logo" class="img-fluid" />
+            </div>
+
+            <EditForm Model="user" OnValidSubmit="HandleLogin">
+                <!-- Email input -->
+                <div class="form-group">
+                    <label for="form2Example1">Email address</label>
+                    <input type="email" id="form2Example1" @bind-value="user.Email" class="form-control" />
+                </div>
+
+                <!-- Password input -->
+                <div class="form-group">
+                    <label for="form2Example2">Password</label>
+                    <input type="password" id="form2Example2" class="form-control" @bind-value="user.Password" />
+                </div>
+
+                <!-- Remember me and Forgot password -->
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                            <label class="form-check-label" for="form2Example31"> Remember me </label>
+                        </div>
+                    </div>
+                    <div class="col text-right">
+                        <a href="#!" class="text-decoration-none">Forgot password?</a>
+                    </div>
+                </div>
+
+                <!-- Submit button centered -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </div>
+
+                <!-- Not a member? Register link -->
+                <div class="text-center mt-3">
+                    <p>Not a member? <a href="register">Register</a></p>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@code {
+    UserLogin user = new UserLogin();
+    private string message = string.Empty;
+    private async Task HandleLogin()
+    {
+        var result = await _authManager.Login(user);
+        if (result.Success == true)
+        {
+            message = result.Message;
+            await _localStorage.SetItemAsync("authToken", result.Data);
+            await _authenticationStateProvider.GetAuthenticationStateAsync();
+            _navigationManager.NavigateTo("");
+            //await _js.InvokeVoidAsync("ShowToastr", "success", message);
+
+        }
+        else
+        {
+            message = result.Message;
+            //await _js.InvokeVoidAsync("ShowToastr", "error", message);
+        }
+    }
+}
