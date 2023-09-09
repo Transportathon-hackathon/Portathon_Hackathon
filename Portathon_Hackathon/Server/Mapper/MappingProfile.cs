@@ -11,6 +11,7 @@ namespace Portathon_Hackathon.Server.Mapper
             CreateMap<Company, CompanyDTO>().ReverseMap();
             CreateMap<Vehicle, VehicleDTO>().ReverseMap();
             CreateMap<CrewMember, CrewMemberDTO>().ReverseMap();
+            CreateMap<Request, RequestDTO>().ReverseMap();
         }
     }
 }

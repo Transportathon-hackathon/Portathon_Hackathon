@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portathon_Hackathon.Server.Services.Abstract;
+using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
 
 namespace Portathon_Hackathon.Server.Controllers
@@ -25,6 +26,26 @@ namespace Portathon_Hackathon.Server.Controllers
                 return Ok(result.Data);
             }
             return BadRequest(result.Message);
+        }
+        [HttpGet("{companyId}")]
+        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetAllVehicles([FromRoute] int companyId)
+        {
+            var result = await _vehicleService.GetAllVehicles(companyId);
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("{companyId}/{vehicleId}")]
+        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetAllVehicles([FromRoute] int companyId, int vehicleId)
+        {
+            var result = await _vehicleService.GetVehicleById(companyId, vehicleId);    
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
 

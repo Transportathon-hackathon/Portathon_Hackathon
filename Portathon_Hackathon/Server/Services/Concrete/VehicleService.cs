@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Portathon_Hackathon.Server.Context;
 using Portathon_Hackathon.Server.Services.Abstract;
 using Portathon_Hackathon.Shared;
@@ -37,6 +38,48 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             response.Message = "Vehicle is not Created";
             return response;
 
+        }
+
+        public async Task<ServiceResponse<List<VehicleDTO>>> GetAllVehicles(int companyId)
+        {
+            var vehicles =await  _context.Vehicles.Where(opt => opt.CompanyId == companyId).ToListAsync();
+            var responseData = _mapper.Map<List<VehicleDTO>>(vehicles);
+            if(vehicles is null )
+            {
+                return new ServiceResponse<List<VehicleDTO>>
+                {
+                    Data = null,
+                    Message ="There is no vehicle in this copmany",
+                    Success = false
+                };
+            }
+            return new ServiceResponse<List<VehicleDTO>>
+            {
+                Data = responseData,
+                Success = true,
+                Message = "All vehicles is listed"
+            };
+        }
+
+        public async Task<ServiceResponse<VehicleDTO>> GetVehicleById(int companyId, int vehicleId)
+        {
+            var vehicle = await _context.Vehicles.Where(opt => opt.CompanyId == companyId && opt.VehicleId == vehicleId).FirstOrDefaultAsync();
+            var responseData = _mapper.Map<VehicleDTO>(vehicle);
+            if (vehicle is null)
+            {
+                return new ServiceResponse<VehicleDTO>
+                {
+                    Data = null,
+                    Message = "The vehicle could not found",
+                    Success = false
+                };
+            }
+            return new ServiceResponse<VehicleDTO>
+            {
+                Data = responseData,
+                Success = true,
+                Message = "The Vehicle has found"
+            };
         }
     }
 }
