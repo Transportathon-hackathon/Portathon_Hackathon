@@ -12,5 +12,7 @@ namespace Portathon_Hackathon.Server.Services.Abstract
 
         Task<ServiceResponse<RequestDTO>> GetRequest(int requestId);
         Task<ServiceResponse<string>> DeleteRequest(int requestId);
+
+        Task<ServiceResponse<RequestDTO>> UpdateRequest(int requestId, RequestDTO requestDTO);
     }
 }

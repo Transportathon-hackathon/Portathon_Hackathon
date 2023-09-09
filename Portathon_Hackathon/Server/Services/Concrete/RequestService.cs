@@ -19,12 +19,31 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             _context = context;
             _mapper = mapper;
         }
-       
+        
+        public bool UserAlreadyRequested(int VehicleId)
+        {
+            var vehicle = _context.Requests.Any(opt => opt.VehicleId == VehicleId);
+            if(vehicle == true)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public async Task<ServiceResponse<RequestDTO>> CreateRequest(int userId,RequestDTO requestDto)
         {
             var request = _mapper.Map<Request>(requestDto);
             request.UserId = userId;
+
+            if(UserAlreadyRequested(requestDto.VehicleId) == true)
+            {
+                return new ServiceResponse<RequestDTO>
+                {
+                    Data = null,
+                    Message = "You can not send another request to the same vehicle",
+                    Success = false
+                };
+            }
             await _context.Requests.AddAsync(request);
             await _context.SaveChangesAsync();
             return new ServiceResponse<RequestDTO>
@@ -90,6 +109,28 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = true
             };
 
+        }
+
+        public async Task<ServiceResponse<RequestDTO>> UpdateRequest(int requestId, RequestDTO requestUpdate)
+        {
+            var request =await _context.Requests.Where(opt => opt.RequestId == requestId).FirstOrDefaultAsync();
+            
+            if(request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var newRequest = _mapper.Map<Request>(requestUpdate);
+            await _context.Requests.AddAsync(newRequest); 
+            await _context.SaveChangesAsync();
+
+            var data = _mapper.Map<RequestDTO>(newRequest);
+            return new ServiceResponse<RequestDTO>
+            {   
+                Data = data,
+                Message = "The request updated successfully",
+                Success = true
+            };
         }
     }
 }

@@ -47,5 +47,11 @@ namespace Portathon_Hackathon.Server.Controllers
             var response = await _requestService.DeleteRequest(requestId);
             return Ok(response);
         }
+        [HttpPut]
+        public async Task<ActionResult> UpdateRequest(int requestId,RequestDTO requestDTO)
+        {
+            var response = await _requestService.UpdateRequest(requestId, requestDTO);
+            return Ok(response);
+        }
     }
 }
