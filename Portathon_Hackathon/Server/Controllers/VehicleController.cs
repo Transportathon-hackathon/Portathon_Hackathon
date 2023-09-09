@@ -37,10 +37,10 @@ namespace Portathon_Hackathon.Server.Controllers
             }
             return BadRequest(result);
         }
-        [HttpGet("{companyId}/{vehicleId}")]
-        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetAllVehicles([FromRoute] int companyId, int vehicleId)
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetWehiclesById(int vehicleId)
         {
-            var result = await _vehicleService.GetVehicleById(companyId, vehicleId);    
+            var result = await _vehicleService.GetVehicleById(vehicleId);    
             if (result.Success == true)
             {
                 return Ok(result);

@@ -61,9 +61,9 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             };
         }
 
-        public async Task<ServiceResponse<VehicleDTO>> GetVehicleById(int companyId, int vehicleId)
+        public async Task<ServiceResponse<VehicleDTO>> GetVehicleById(int vehicleId)
         {
-            var vehicle = await _context.Vehicles.Where(opt => opt.CompanyId == companyId && opt.VehicleId == vehicleId).FirstOrDefaultAsync();
+            var vehicle = await _context.Vehicles.Where(opt => opt.VehicleId == vehicleId).FirstOrDefaultAsync();
             var responseData = _mapper.Map<VehicleDTO>(vehicle);
             if (vehicle is null)
             {
