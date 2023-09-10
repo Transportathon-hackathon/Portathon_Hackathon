@@ -9,6 +9,7 @@ namespace Portathon_Hackathon.Server.Services.Abstract
     {
         Task<ServiceResponse<Reservation>> CreateReservation(ReservationDTO reservationDTO);
         Task<ServiceResponse<ReservationReturnDTO>> GetReservation(int reservationId);
+        Task<ServiceResponse<List<ReservationReturnDTO>>> GetReservationByUserId(int reservationId);
         Task<ServiceResponse<List<Reservation>>> GetAllReservations();
     }
 }

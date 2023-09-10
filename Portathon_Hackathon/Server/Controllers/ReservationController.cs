@@ -6,11 +6,11 @@ namespace Portathon_Hackathon.Server.Controllers
 {
     [Route("api/reservation")]
     [ApiController]
-    public class ReservarionController :ControllerBase
+    public class ReservationController :ControllerBase
     {
         private readonly IReservationService _reservationService;
 
-        public ReservarionController(IReservationService reservationService)
+        public ReservationController(IReservationService reservationService)
         {
             _reservationService = reservationService;
         }
@@ -23,11 +23,20 @@ namespace Portathon_Hackathon.Server.Controllers
             return Ok(response);
         }
         [HttpGet]
-        public async Task<ActionResult> ReservationFeedBack(int reservationId)
+        public async Task<ActionResult> GetReservationByReservationId(int reservationId)
         {
             var response = await _reservationService.GetReservation(reservationId);
 
             return Ok(response);
         }
+
+        [HttpGet("getreservationbyuserid")]
+        public async Task<ActionResult> GetReservationByUserId(int userId)
+        {
+            var response = await _reservationService.GetReservationByUserId(userId);
+
+            return Ok(response);
+        }
+
     }
 }

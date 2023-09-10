@@ -120,11 +120,11 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var newRequest = _mapper.Map<Request>(requestUpdate);
-            await _context.Requests.AddAsync(newRequest); 
+            var newRequest = _mapper.Map(requestUpdate,request);
+            _context.Requests.Update(newRequest); 
             await _context.SaveChangesAsync();
 
-            var data = _mapper.Map<RequestDTO>(newRequest);
+            var data = _mapper.Map<RequestDTO>(request);
             return new ServiceResponse<RequestDTO>
             {   
                 Data = data,

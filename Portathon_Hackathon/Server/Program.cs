@@ -18,6 +18,7 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<ICrewMemberService, CrewMemberService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<IReservationService , ReservationService>();
+builder.Services.AddScoped<IEvoluationService, EvoluationService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();

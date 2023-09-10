@@ -9,6 +9,7 @@ namespace Portathon_Hackathon.Server.Services.Abstract
         Task<ServiceResponse<VehicleDTO>> CreateVehicle(VehicleDTO request,int companyId);
         Task<ServiceResponse<List<VehicleDTO>>> GetAllVehicles(int companyId);
         Task<ServiceResponse<VehicleDTO>> GetVehicleById(int vehicleId);
-
+        Task<ServiceResponse<VehicleDTO>> UpdateVehicle(int vehicleId, VehicleDTO dto);
+        Task<ServiceResponse<string>> DeleteVehicle(int vehicleId);
     }
 }

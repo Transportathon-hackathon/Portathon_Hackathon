@@ -27,7 +27,7 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             if (reservation.ReservationCase.ToString() == "Rejected")
             {
                
-                await _requestService.DeleteRequest(reservation.RequestId); // Request Silindi
+                await _requestService.DeleteRequest(reservation.RequestId); // Request Deleted because it's recejted
                 await _context.SaveChangesAsync();
                 return new ServiceResponse<Reservation>
                 {
@@ -40,9 +40,16 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             {
                 await _context.Reservations.AddAsync(reservation);
                 await _context.SaveChangesAsync();
+
+                //This method has written because I wanted to return request too with reservation to see if there is ant request detail which may be
+                //important to company and the user like any request condition detail
+                var reservatioData =await _context.Reservations.Where(opt => opt.ReservationId == reservation.ReservationId)
+                    .Include(opt =>opt.Request).FirstOrDefaultAsync();
+
+
                 return new ServiceResponse<Reservation>
                 {
-                    Data = reservation,
+                    Data = reservatioData, // we can return reservation too it will work correctly
                     Message = "Reservation Added",
                     Success = true
                 };
@@ -76,7 +83,7 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             .Include(opt => opt.Request)
             .ThenInclude(opt => opt.Vehicle)
             .Include(opt => opt.Request)
-            .ThenInclude(opt => opt.User)  // Include User here
+            .ThenInclude(opt => opt.User)  
             .FirstOrDefaultAsync();
 
 
@@ -96,6 +103,40 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = true,
                 Message = "Reservation is getted"
             };
+        }
+
+        public async Task<ServiceResponse<List<ReservationReturnDTO>>> GetReservationByUserId(int userId)
+        {
+            var reservation = await _context.Reservations
+              .Where(opt => opt.Request.UserId == userId)
+              .Include(opt => opt.Request)
+              .ThenInclude(opt => opt.Vehicle)
+              .Include(opt => opt.Request)
+              .ThenInclude(opt => opt.User)
+              .ToListAsync();
+
+
+            var reservationDto = _mapper.Map<List<ReservationReturnDTO>>(reservation);
+            
+            if(reservationDto == null)
+            {
+                return new ServiceResponse<List<ReservationReturnDTO>>
+                {
+                    Data = null,
+                    Message = "Ypu have no reservagtion",
+                    Success = false,
+
+                };
+            }
+
+            return new ServiceResponse<List<ReservationReturnDTO>>
+            {
+                Data = reservationDto,
+                Message = "The user's Reservations getted",
+                Success = true,
+
+            };
+
         }
     }
 }
