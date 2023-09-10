@@ -22,5 +22,12 @@ namespace Portathon_Hackathon.Server.Controllers
 
             return Ok(response);
         }
+        [HttpGet]
+        public async Task<ActionResult> ReservationFeedBack(int reservationId)
+        {
+            var response = await _reservationService.GetReservation(reservationId);
+
+            return Ok(response);
+        }
     }
 }

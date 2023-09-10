@@ -11,8 +11,7 @@ namespace Portathon_Hackathon.Shared.Entities
     {
         [Key]
         public int CompanyId { get; set; }  
-        public string CompanyName { get; set; } 
-
+        public string CompanyName { get; set; }
         public List<Vehicle> Vehicles { get; set; } 
 
     } 

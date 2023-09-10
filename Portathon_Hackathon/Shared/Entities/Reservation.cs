@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Portathon_Hackathon.Shared.Entities
@@ -16,6 +17,7 @@ namespace Portathon_Hackathon.Shared.Entities
         public DateTime ReservationDate { get; set; } = DateTime.Now;      
         public string OtherDetails { get; set; }
         public Request Request { get; set; }
+        [JsonIgnore]
         public Evaluation Evaluation { get; set; }
     }
 }
