@@ -10,6 +10,7 @@ namespace Portathon_Hackathon.Shared.Entities
 {
     public class Evaluation
     {
+        [Key]
         public int EvaluationId { get; set; }   
 
         public string EvaluationMessage { get; set; }
