@@ -8,5 +8,6 @@ namespace Portathon_Hackathon.Client.Services.Abstract
         Task<ServiceResponse<int>> Register(UserRegister request);
         Task<ServiceResponse<string>> Login(UserLogin user);
         Task<bool> IsUserAuthenticated();
+        Task Logout();
     }
 }

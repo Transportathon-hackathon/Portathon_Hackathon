@@ -3,19 +3,11 @@
 @using Portathon_Hackathon.Shared.Entities;
 @inject IAuthManager _authManager
 @inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.Components.Forms
 
-@*
- [Required(ErrorMessage = "Email alanı gereklidir"), EmailAddress]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Kullanıcı adı gereklidir"), EmailAddress]
-        public string Username { get; set; }
-
-        [Required, StringLength(100, MinimumLength = 6)]
-        public string Password { get; set; }
-        [Compare("Password", ErrorMessage = "pasword do not match")]
-        public string ConfirmPassword { get; set; }
-        public UserTypes UserType { get; set; }*@
-
+@{
+    
+}
 
 <div class="container">
     <div class="row justify-content-center">
@@ -38,9 +30,9 @@
                 <!-- Name input -->
                 <div class="form-group">
                     <label for="Email" class="form-label">Email</label>
-                    <InputText type="text" id="registerName" @bind-Value="user.Email" class="form-control" />
+                    <InputText type="email" id="registerName" @bind-Value="user.Email" class="form-control" />
                 </div>
-
+                
                 <!-- Username input -->
                 <div class="form-group">
                     <label for="registerUsername" class="form-label">Username</label>
@@ -58,10 +50,10 @@
                     <label for="registerRepeatPassword" class="form-label">Repeat password</label>
                     <InputText type="password" id="registerRepeatPassword" @bind-Value="user.ConfirmPassword" class="form-control" />
                 </div>
-                <InputSelect class="form-control" @bind-Value="selectedUserType">
+              @*  <InputSelect class="form-control" @bind-Value="user.">
                     <option value="0">User</option>
                     <option value="1">Company</option>
-                </InputSelect>
+                </InputSelect>*@
                 <!-- Checkbox -->
                 <div class="form-check d-flex justify-content-center mb-4">
                     <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
@@ -75,7 +67,7 @@
 
                 <div class="text-center mt-3">
                     <button type="submit" class="btn btn-primary btn-block mb-3">Sign Up</button>
-                    <p>Are you already a member? <a href="login">Sign in</a></p>
+                    <p>Are you already a member? <a href="/Account/Login">Sign in</a></p>
                 </div>
             </EditForm>
         </div>
@@ -88,16 +80,12 @@
 @code {
     UserRegister user = new UserRegister();
 
-    string message = string.Empty;
-    string messageCssClass = string.Empty;
-    private int selectedUserType;
+   
     private async Task HandleRegistration()
     {
-        int userTypeValue = GetSelectedUserTypeAsInt();
         var result = await _authManager.Register(user);
         if (result.Success == false)
         {
-            message = result.Message;
         }
         else
         {
@@ -106,16 +94,11 @@
         }
         if (!result.Success)
         {
-            messageCssClass = "text-success";
         }
         else
         {
-            messageCssClass = "text-danger";
         }
     }   
-    private int GetSelectedUserTypeAsInt()
-    {
-        return selectedUserType;
-    }
+
    
 }

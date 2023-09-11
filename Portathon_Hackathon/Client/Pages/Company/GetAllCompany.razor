@@ -1,0 +1,47 @@
+﻿@page "/Company/GetAllCompany"
+@using Portathon_Hackathon.Shared.DTO;
+
+@inject ICompanyManager _companyManager;
+<body>
+    @foreach (var item in _companies)
+        {
+        
+            <div class="container bcontent text-center mt-4">
+                <div class="card text-center" style="width: 750px;">
+                    <div class="row no-gutters">
+                        <div class="col-sm-5">
+                            <img class="card-img" src="/image/@item.ImageUrl" alt="Suresh Dasari Card">
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.CompanyName</h5>
+                                <p class="card-text">Suresh Dasari is a founder and technical lead developer in tutlane.</p>
+                                <a href="#" class="btn btn-primary">View Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+  
+    }
+</body>
+
+
+
+
+
+@code {
+    private List<CompanyDTO> _companies = new List<CompanyDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _companyManager.GetAllCompany();
+        if(result.Data != null)
+        {
+            _companies = result.Data;
+        }
+    }
+
+
+}

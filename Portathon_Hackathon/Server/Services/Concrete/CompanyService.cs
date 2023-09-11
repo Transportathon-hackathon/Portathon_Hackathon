@@ -36,6 +36,22 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             return response;
         }
 
+        public async Task<ServiceResponse<List<CompanyDTO>>> GetAllCompanies()
+        {
+            var result = await _context.Companies.ToListAsync();
+            ServiceResponse<List<CompanyDTO>> _response = new ServiceResponse<List<CompanyDTO>>(); 
+            if(result != null)
+            {
+                var objDTO = _mapper.Map<List<CompanyDTO>>(result);
+                _response.Data = objDTO;
+                _response.Success = true;
+                _response.Message = "Listed";
+                return _response;
+            }
+            return _response;
+
+        }
+
         public async Task<ServiceResponse<List<Company>>> GetCompanyFeatures(int companyId)
         {
             ServiceResponse<List<Company>> _response = new ServiceResponse<List<Company>>();

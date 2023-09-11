@@ -18,5 +18,6 @@ namespace Portathon_Hackathon.Shared.Entities
         public int VehicleId { get; set; }
         [JsonIgnore]
         public Vehicle Vehicle { get; set; }
+     
     }
 }

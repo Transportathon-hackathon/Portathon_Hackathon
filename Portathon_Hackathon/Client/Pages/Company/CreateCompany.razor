@@ -1,0 +1,93 @@
+﻿@page "/Company/CreateCompany"
+@using BlazorInputFile;
+@using System.IO
+@attribute [Authorize]
+@inject ICompanyManager _companyManager;
+@inject AuthenticationStateProvider _authStateProvider
+@inject NavigationManager _navigationManager
+@inject IFileUploadService _fileUploadService
+
+@if(Roles == "Company")
+{
+
+        <EditForm Model="company" OnValidSubmit="AddCompany">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Your Company Name" @bind-value="company.CompanyName">
+
+                    </div>
+                </div>
+
+
+
+                <div class="col">
+                    <BlazorInputFile.InputFile OnChange="HandleImageUpload"  ></BlazorInputFile.InputFile>
+                </div>
+                <p></p>
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Save Company</button>
+            </div>
+
+        </EditForm>
+
+  
+
+ 
+}
+else
+{
+    <_accessDenied></_accessDenied>
+}
+
+
+
+@code {
+    string? Roles = "";
+    public CompanyDTO company = new CompanyDTO();
+    public bool isStatus = false;
+    string status;
+    private long maxFileSize = 1024 * 15;
+    private int maxAllowedFiles = 3;
+    private bool isLoading;
+    private ElementReference elementReference;
+    IFileListEntry file;
+    protected override async Task OnInitializedAsync()
+    {
+        string? role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+
+        Roles = role;
+    }
+
+
+    private async Task HandleImageUpload(IFileListEntry[] files)
+    {
+        await Task.Run(() =>
+      {
+          file = files.FirstOrDefault();
+
+      });
+    }
+
+
+    private async Task AddCompany()
+    {
+        company.ImageUrl = file.Name;
+
+        var response = await _companyManager.CreateCompany(company);
+        if(response.Success != false)
+        {
+            await _fileUploadService.FileUploadAsync(file, "FolderName");
+            isStatus = true;
+            _navigationManager.NavigateTo("/Company/GetAllCompany");
+
+        }
+    }
+
+
+   
+
+
+}

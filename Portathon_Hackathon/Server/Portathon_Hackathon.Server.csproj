@@ -25,5 +25,10 @@
     <ProjectReference Include="..\Shared\Portathon_Hackathon.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 </Project>

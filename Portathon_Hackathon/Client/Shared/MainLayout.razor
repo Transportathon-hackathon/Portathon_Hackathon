@@ -1,16 +1,50 @@
 ﻿@inherits LayoutComponentBase
-
+@inject IAuthManager _authManager
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
 <div class="page">
  
     <div class="sidebar">
         <NavMenu />
     </div>
 
-   
 
     <main>
+
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                    <AuthorizeView>
+                        <Authorized>
+                         
+
+                                <NavLink class="nav-link" href="#">
+                                    <span class="p-2">
+                                        Welcome, @context.User.Identity.Name
+                                    </span>
+                                </NavLink>
+                           
+                       
+                                <NavLink class="nav-link" type="button"  @onclick="Logout">
+                                    <span class="p-2">
+                                        Logout
+                                    </span>
+                                </NavLink>
+                         
+                        </Authorized>
+                        <NotAuthorized>
+
+                                <NavLink class="nav-link" href="/Account/Register">
+                                    <span class="p-2">
+                                        Register
+                                    </span>
+                                </NavLink>
+                                <NavLink class="nav-link" href="/Account/Login">
+                                    <span class="p-2">
+                                        Login
+                                    </span>
+                                </NavLink>
+                        </NotAuthorized>
+
+                    </AuthorizeView>
         </div>
 
         <article class="content px-4">
@@ -18,3 +52,14 @@
         </article>
     </main>
 </div>
+
+
+@code{
+    public async Task Logout()
+    {
+        await _authManager.Logout();
+        await _authenticationStateProvider.GetAuthenticationStateAsync();
+        _navigationManager.NavigateTo("");
+        await OnInitializedAsync();
+    }
+}

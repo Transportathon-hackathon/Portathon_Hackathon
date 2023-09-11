@@ -1,4 +1,6 @@
 ﻿@page "/Account/Login"
+@using System.Web;
+@using Microsoft.AspNetCore.Components.Forms
 
 @inject IAuthManager _authManager
 @inject NavigationManager _navigationManager
@@ -47,7 +49,7 @@
 
                 <!-- Not a member? Register link -->
                 <div class="text-center mt-3">
-                    <p>Not a member? <a href="register">Register</a></p>
+                    <p>Not a member? <a href="/Account/Register">Register</a></p>
                 </div>
             </EditForm>
         </div>
@@ -61,22 +63,28 @@
 @code {
     UserLogin user = new UserLogin();
     private string message = string.Empty;
+    public string ReturnPath { get; set; }
     private async Task HandleLogin()
     {
         var result = await _authManager.Login(user);
-        if (result.Success == true)
+        if (result.Success)
         {
-            message = result.Message;
+            var absoluteUri = new Uri(_navigationManager.Uri);
+            var queryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
+            ReturnPath = queryParam["returnUrl"];
             await _localStorage.SetItemAsync("authToken", result.Data);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
-            _navigationManager.NavigateTo("");
-            //await _js.InvokeVoidAsync("ShowToastr", "success", message);
 
+            if (string.IsNullOrEmpty(ReturnPath))
+            {
+                _navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                _navigationManager.NavigateTo("/" + ReturnPath);
+            }
         }
-        else
-        {
-            message = result.Message;
-            //await _js.InvokeVoidAsync("ShowToastr", "error", message);
-        }
+     
     }
 }

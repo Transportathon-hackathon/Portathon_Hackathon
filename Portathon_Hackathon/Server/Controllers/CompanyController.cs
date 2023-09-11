@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portathon_Hackathon.Server.Services.Abstract;
@@ -25,9 +26,9 @@ namespace Portathon_Hackathon.Server.Controllers
             var result = await _companyService.CreateCompany(obj);
             if(result.Success == true)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
 
         [HttpGet("{companyId}")]
@@ -36,5 +37,19 @@ namespace Portathon_Hackathon.Server.Controllers
             var result = await _companyService.GetCompanyFeatures(companyId);
           return Ok(result);
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllCompanies()
+        {
+            var result = await _companyService.GetAllCompanies();   
+            if(result.Success == true)
+            {
+                return Ok(result);  
+            }
+            return BadRequest(result);  
+        }
+
+
     }
 }

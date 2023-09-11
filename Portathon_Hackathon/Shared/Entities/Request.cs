@@ -11,6 +11,8 @@ namespace Portathon_Hackathon.Shared.Entities
     {
         [Key]
         public int RequestId { get; set; }
+        public int VehicleId { get; set; }
+        public Vehicle Vehicle { get; set; }
         public int UserId { get; set; } 
         public User User { get; set; }  
         public string RequestType { get; set; } 
