@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Portathon_Hackathon.Shared.Entities
@@ -16,7 +17,8 @@ namespace Portathon_Hackathon.Shared.Entities
         public byte[] PasswordSalt { get; set; }
         public byte[] PasswordHash { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        public string UserType { get; set; }    
+        public string UserType { get; set; }
+        [JsonIgnore]
         public List<Request> Requests { get; set; } 
     }
 

@@ -40,6 +40,32 @@ namespace Portathon_Hackathon.Server.Services.Concrete
 
         }
 
+        public async Task<ServiceResponse<string>> DeleteVehicle(int vehicleId)
+        {
+
+            var vehicle = await _context.Vehicles.Where(opt => opt.VehicleId == vehicleId).FirstOrDefaultAsync();
+            
+             if(vehicle == null)
+             {
+                return new ServiceResponse<string>
+                {
+                    Success = false,
+                    Message = "Deleting Opearation Has Failed",
+                    Data = "A problem occured while looking for the vehicle"
+                };
+             }
+
+            _context.Vehicles.Remove(vehicle);
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse<string>
+            {
+                Success = true,
+                Message = "You have deleted the Vehicle Successfully"
+            };
+     
+        }
+
         public async Task<ServiceResponse<List<VehicleDTO>>> GetAllVehicles(int companyId)
         {
             var vehicles =await  _context.Vehicles.Where(opt => opt.CompanyId == companyId).ToListAsync();
@@ -80,6 +106,35 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = true,
                 Message = "The Vehicle has found"
             };
+        }
+
+        public async Task<ServiceResponse<VehicleDTO>> UpdateVehicle(int vehicleId,VehicleDTO dto)
+        {
+            var vehicle =await _context.Vehicles.Where(opt => opt.VehicleId == vehicleId).FirstOrDefaultAsync();
+
+            if (vehicle == null)
+            {
+                return new ServiceResponse<VehicleDTO>
+                {
+                    Data = null,
+                    Success = false,
+                    Message = "The update Operation Failed"
+                };
+            }
+            var objDTO = _mapper.Map(dto, vehicle);
+            //objDTO.VehicleId = vehicleId;
+            _context.Vehicles.Update(objDTO);
+            await _context.SaveChangesAsync();
+            
+            var vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
+
+
+                return new ServiceResponse<VehicleDTO>
+                {
+                    Data = vehicleDTO,
+                    Success = true,
+                    Message = "The update Operation Has succeded"
+                };
         }
     }
 }
