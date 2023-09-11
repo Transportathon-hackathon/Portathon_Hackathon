@@ -25,9 +25,9 @@ namespace Portathon_Hackathon.Server.Controllers
             var result = await _vehicleService.CreateVehicle(obj,companyId);
             if (result.Success == true)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            return BadRequest(result.Message);
+            return BadRequest(result);
         }
         [HttpGet("{companyId}")]
         public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetAllVehicles([FromRoute] int companyId)

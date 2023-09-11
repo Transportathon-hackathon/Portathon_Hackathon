@@ -50,10 +50,11 @@
                     <label for="registerRepeatPassword" class="form-label">Repeat password</label>
                     <InputText type="password" id="registerRepeatPassword" @bind-Value="user.ConfirmPassword" class="form-control" />
                 </div>
-              @*  <InputSelect class="form-control" @bind-Value="user.">
+
+                <InputSelect class="form-control" @bind-Value="user.UserType">
                     <option value="0">User</option>
                     <option value="1">Company</option>
-                </InputSelect>*@
+                </InputSelect>
                 <!-- Checkbox -->
                 <div class="form-check d-flex justify-content-center mb-4">
                     <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked

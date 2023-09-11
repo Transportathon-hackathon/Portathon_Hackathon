@@ -17,6 +17,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddOptions();

@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-<<<<<<< HEAD
-=======
-using Microsoft.Exchange.WebServices.Data;
->>>>>>> 8f511c3d449a0a715dea88968ec387026f2810c6
 using Portathon_Hackathon.Server.Services.Abstract;
 using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;

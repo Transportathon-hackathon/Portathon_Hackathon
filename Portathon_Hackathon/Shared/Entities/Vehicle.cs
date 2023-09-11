@@ -22,10 +22,9 @@ namespace Portathon_Hackathon.Shared.Entities
         public string VehicleType { get; set; }
         [JsonIgnore]
         public Company Company { get; set; }
-<<<<<<< HEAD
-=======
+
+
         [JsonIgnore]
->>>>>>> 8f511c3d449a0a715dea88968ec387026f2810c6
         public List<Request> requests { get; set; }
         public List<CrewMember> CrewMembers { get; set; }
         //public int ChauffeurId { get; set; }    

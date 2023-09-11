@@ -23,7 +23,7 @@ namespace Portathon_Hackathon.Server.Controllers
         {
             var result = await _authService.Register(new User
             {
-                //UserType = user.UserType.ToString(),
+                UserType = user.UserType.ToString(),
                 Email = user.Email,
                 Username = user.Username,
 

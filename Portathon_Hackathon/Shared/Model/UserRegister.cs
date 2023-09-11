@@ -18,7 +18,7 @@ namespace Portathon_Hackathon.Shared.Model
         public string Password { get; set; }
         [Compare("Password", ErrorMessage = "pasword do not match")]
         public string ConfirmPassword { get; set; }
-        //public UserTypes UserType { get; set; }
+        public UserTypes UserType { get; set; }
     }
 
     public enum UserTypes

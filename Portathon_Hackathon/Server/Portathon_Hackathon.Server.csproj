@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Images\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="Images\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Images\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.15" />
@@ -23,11 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\Portathon_Hackathon.Client.csproj" />
     <ProjectReference Include="..\Shared\Portathon_Hackathon.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 

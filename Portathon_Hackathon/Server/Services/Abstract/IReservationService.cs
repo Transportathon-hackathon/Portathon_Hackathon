@@ -1,5 +1,4 @@
-﻿using Microsoft.Exchange.WebServices.Data;
-using Portathon_Hackathon.Shared;
+﻿using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
 using Portathon_Hackathon.Shared.Entities;
 

@@ -17,11 +17,10 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<ICrewMemberService, CrewMemberService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
-<<<<<<< HEAD
-=======
+
 builder.Services.AddScoped<IReservationService , ReservationService>();
 builder.Services.AddScoped<IEvoluationService, EvoluationService>();
->>>>>>> 8f511c3d449a0a715dea88968ec387026f2810c6
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
