@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portathon_Hackathon.Server.Services.Abstract;
 using Portathon_Hackathon.Shared.DTO;
+using System.Security.Claims;
 
 namespace Portathon_Hackathon.Server.Controllers
 {
@@ -23,6 +24,8 @@ namespace Portathon_Hackathon.Server.Controllers
         [Authorize(Roles ="Company")]
         public async Task<ActionResult> CreateCompany(CompanyDTO obj)
         {
+            var userId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            obj.UserId = userId;
             var result = await _companyService.CreateCompany(obj);
             if(result.Success == true)
             {
@@ -31,11 +34,20 @@ namespace Portathon_Hackathon.Server.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("{companyId}")]
-        public async Task<ActionResult> GetCompany([FromRoute]int companyId)
+        [HttpGet("getcompany")]
+        public async Task<ActionResult> GetCompany(int companyId)
         {
             var result = await _companyService.GetCompanyFeatures(companyId);
-          return Ok(result);
+          return Ok(result.Message);
+        }
+
+        [Authorize(Roles ="Company")]
+        [HttpGet("getcompanyid")]
+        public async Task<ActionResult> GetCompanyIdByUserId()
+        {
+            var userId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var result = await _companyService.GetCompanyIdByUserId(userId);
+            return Ok(result);
         }
 
 

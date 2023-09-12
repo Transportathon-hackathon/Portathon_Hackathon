@@ -1,7 +1,9 @@
 ﻿@page "/Company/CreateVehicle/{companyId:int}" 
 @inject IVehicleService _vehiclseManager
 @inject NavigationManager _navigationManager
+@inject IToastService _toastrService
 <EditForm Model="vehicleDTO"OnValidSubmit="CreateVehicleAsync">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="form-group">
         <label for="vehicleType">Vehicle Type</label>
         <select class="form-control" id="vehicleType" @bind="vehicleDTO.VehicleType">
@@ -29,6 +31,7 @@
         <label for="chauffeurName">Chauffeur Name</label>
         <input type="text" class="form-control" id="chauffeurName" @bind="vehicleDTO.ChauffeurName">
     </div>
+    <ValidationSummary></ValidationSummary>
     <br /><br />
     <button type="submit" class="btn btn-primary">Create Vehicle</button>
 </EditForm>
@@ -54,8 +57,11 @@
 
         if(result.Success == true)
         {
-            // we should add here a toastr package
-
+            _toastrService.ShowSuccess("Vehicle Created You can see in Vehicles Page");
+        }
+        else
+        {
+            _toastrService.ShowError("A problem occured While Creating Vehicle!");
         }
 
     }

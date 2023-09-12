@@ -19,6 +19,7 @@ namespace Portathon_Hackathon.Shared.Entities
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public string UserType { get; set; }
         [JsonIgnore]
+        public Company Company { get; set; }
         public List<Request> Requests { get; set; } 
     }
 

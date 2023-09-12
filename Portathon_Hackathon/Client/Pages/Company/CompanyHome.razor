@@ -1,0 +1,48 @@
+﻿@page "/Company/Home"
+@inject ICompanyManager _companyManager
+@inject AuthenticationStateProvider _authStateProvider
+
+<div class="container bcontent text-center mt-4">
+    <div class="card text-center" style="width: 750px;">
+        <div class="row no-gutters">
+            <div class="col-sm-5">
+                <img class="card-img" src="/image/@_company.ImageUrl" alt="Suresh Dasari Card">
+            </div>
+            <div class="col-lg-7">
+                <div class="card-body">
+                    <h5 class="card-title">@_company.CompanyName</h5>
+                    <p class="card-text">Suresh Dasari is a founder and technical lead developer in tutlane.</p>
+                    <a href="#" class="btn btn-primary">View Profile</a>
+                    <a href="Company/CreateVehicle/@_company.CompanyId" class="btn btn-primary">Add new Vehicles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+    private Company _company = new Company();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var resultCompanyId = await _companyManager.GetCompanyId();
+        int  companyId = resultCompanyId.Data;
+        Console.WriteLine(companyId);
+
+        var result = await _companyManager.GetCompanyById(companyId);
+        Console.WriteLine(result);
+        if(result.Data != null)
+        {
+            _company = result.Data;
+        }
+        else
+        {
+            Console.WriteLine(result.Data);
+        }
+
+       
+    }
+}

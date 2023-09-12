@@ -8,5 +8,7 @@ namespace Portathon_Hackathon.Client.Services.Abstract
     {
         Task<ServiceResponse<CompanyDTO>> CreateCompany(CompanyDTO model);
         Task<ServiceResponse<List<CompanyDTO>>> GetAllCompany();
+        Task<ServiceResponse<Company>> GetCompanyById(int companyId);
+        Task<ServiceResponse<int>> GetCompanyId();
     }
 }

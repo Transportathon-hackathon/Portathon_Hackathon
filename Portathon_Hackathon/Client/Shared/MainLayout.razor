@@ -2,19 +2,19 @@
 @inject IAuthManager _authManager
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject NavigationManager _navigationManager
+@using Blazored.Toast.Configuration
 <div class="page">
  
     @*<div class="sidebar">
         <NavMenu />
     </div>*@
-
+    
 
     <main>
 
         <div class="top-row px-4">
                     <AuthorizeView>
                         <Authorized>
-                         
 
                                 <NavLink class="nav-link" href="#">
                                     <span class="p-2">
@@ -52,7 +52,12 @@
         </article>
     </main>
 </div>
-
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                        Timeout="10"
+                        IconType="IconType.FontAwesome"
+                        SuccessClass="success-toast-override"
+                        SuccessIcon="fa fa-thumbs-up "
+                        ErrorIcon="fa fa-bug" />
 
 @code{
     public async Task Logout()

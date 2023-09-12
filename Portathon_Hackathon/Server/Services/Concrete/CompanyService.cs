@@ -79,5 +79,25 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             
           
         }
+
+        public async Task<ServiceResponse<int>> GetCompanyIdByUserId(int userId)
+        {
+            var company = await _context.Companies.Where(opt => opt.UserId == userId).FirstOrDefaultAsync();
+            if(company == null)
+            {
+                return new ServiceResponse<int>
+                {
+                    Data =  0,
+                    Message = "There is no company with this userId",
+                    Success = false
+                };
+            }
+            return new ServiceResponse<int> 
+            {
+                Data = company.CompanyId,
+                Message  = "Company Id getted Successfully",
+                Success = true
+            }; 
+        }
     }
 }
