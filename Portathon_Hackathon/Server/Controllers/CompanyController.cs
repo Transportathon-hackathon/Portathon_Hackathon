@@ -38,7 +38,7 @@ namespace Portathon_Hackathon.Server.Controllers
         public async Task<ActionResult> GetCompany(int companyId)
         {
             var result = await _companyService.GetCompanyFeatures(companyId);
-          return Ok(result.Message);
+          return Ok(result);
         }
 
         [Authorize(Roles ="Company")]

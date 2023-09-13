@@ -18,12 +18,12 @@ namespace Portathon_Hackathon.Server.Controllers
 
 
         [HttpPost("{vehicleId}")]
-        public async Task<ActionResult> CreateVehicle(CrewMemberDTO obj, [FromRoute] int vehicleId)
+        public async Task<ActionResult> CreateCrewMember(CrewMemberDTO obj, [FromRoute] int vehicleId)
         {
             var result = await _crewMemberService.CreateCrewMember(obj, vehicleId);
             if (result.Success == true)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
             return BadRequest(result.Message);
         }

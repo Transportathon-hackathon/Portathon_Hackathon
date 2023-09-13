@@ -1,8 +1,12 @@
 ﻿@page "/Company/Home"
 @inject ICompanyManager _companyManager
 @inject AuthenticationStateProvider _authStateProvider
-
-<div class="container bcontent text-center mt-4">
+@inject IToastService _toastService
+@inject IVehicleService _vehicleService
+@inject IJSRuntime _jsruntime
+@if(_company != null)
+{
+<div class="container bcontent text-center mt-4 bg-light">
     <div class="card text-center" style="width: 750px;">
         <div class="row no-gutters">
             <div class="col-sm-5">
@@ -18,14 +22,50 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+    <h4 class="card-title"> Vehicles </h4>
+    if(_company.Vehicles != null)
+    { 
+        @foreach (var item in _company.Vehicles)
+        {
+            <div class="container bcontent text-center mt-4 bg-light">
+                <div class="card text-center" style="width: 750px;">
+                    <div class="card">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-danger btn-sm float-right" @onclick="() => ConfirmDelete(item.VehicleId)">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
 
+                            <h5 class="card-title"> <strong> Details About The Vehicle </strong></h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@item.Capacity</span></li>
+                                <li class="list-group-item"><strong>Technic Detail:</strong> <span id="technicDetail">@item.TechnicDetail</span></li>
+                                <li class="list-group-item"><strong>Plate Number:</strong> <span id="plateNumber">@item.PlateNumber</span></li>
+                                <li class="list-group-item"><strong>Chauffeur Name:</strong> <span id="chauffeurName">@item.ChauffeurName</span></li>
+                                <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@item.VehicleType</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+        }
+
+    }else
+    {
+        <strong>You have no Vehiclse yet</strong>   
+    }
+    //<CreateVehicle/>
+}else
+{
+    Console.WriteLine(message);
+}
 
 
 @code {
     private Company _company = new Company();
-
+    private string message = string.Empty;
+    private string messageDelete = string.Empty;
     protected override async Task OnInitializedAsync()
     {
         var resultCompanyId = await _companyManager.GetCompanyId();
@@ -34,15 +74,37 @@
 
         var result = await _companyManager.GetCompanyById(companyId);
         Console.WriteLine(result);
-        if(result.Data != null)
+        if(result.Success == true)
         {
             _company = result.Data;
         }
         else
         {
-            Console.WriteLine(result.Data);
-        }
+            message = result.Message;
+        } 
+    }
+    private async Task ConfirmDelete(int vehicleId)
+    {
+        bool userConfirmed = await _jsruntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this vehicle?");
 
-       
+        if (userConfirmed)
+        {
+            await DeleteVehicleAsync(vehicleId);
+        }
+    }
+
+    private async Task DeleteVehicleAsync(int vehicleId)
+    {
+        var resultDelVehicle = await _vehicleService.DeleteVehicle(vehicleId);
+        messageDelete = resultDelVehicle.Message;
+        if(resultDelVehicle.Success == true)
+        {
+            _toastService.ShowSuccess(messageDelete);
+            await OnInitializedAsync();
+        }
+        else
+        {
+            _toastService.ShowError(messageDelete);
+        }
     }
 }

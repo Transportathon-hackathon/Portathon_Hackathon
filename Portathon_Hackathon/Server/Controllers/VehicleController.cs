@@ -40,7 +40,7 @@ namespace Portathon_Hackathon.Server.Controllers
             return BadRequest(result);
         }
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetWehiclesById(int vehicleId)
+        public async Task<ActionResult<ServiceResponse<VehicleDTO>>> GetVehiclesById(int vehicleId)
         {
             var result = await _vehicleService.GetVehicleById(vehicleId);    
             if (result.Success == true)
@@ -58,7 +58,7 @@ namespace Portathon_Hackathon.Server.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("/delete")]
+        [HttpDelete("delete")]
         public async Task<ActionResult> DeleteVehicle(int vehicleId)
         {
             var response =await _vehicleService.DeleteVehicle(vehicleId);

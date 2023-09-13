@@ -52,25 +52,21 @@ namespace Portathon_Hackathon.Server.Services.Concrete
 
         }
 
-        public async Task<ServiceResponse<List<Company>>> GetCompanyFeatures(int companyId)
+        public async Task<ServiceResponse<Company>> GetCompanyFeatures(int companyId)
         {
-            ServiceResponse<List<Company>> _response = new ServiceResponse<List<Company>>();
+            ServiceResponse<Company> _response = new ServiceResponse<Company>();
             var result = await _context.Companies
                 .Include(x => x.Vehicles)
                 .ThenInclude(x=>x.CrewMembers)
                 .Where(x => x.CompanyId == companyId)
-                .ToListAsync();
-            List<Company> resultList = new List<Company>(); 
+                .FirstOrDefaultAsync();
            
-            if(result.Count != 0)
+           
+            if(result != null)
             {
-                foreach (var item in result)
-                {
-                    resultList.Add(item);
-                }
                 _response.Success = true;
-                _response.Message = "Listed";
-                _response.Data = resultList;
+                _response.Message = "Company Getted";
+                _response.Data = result;
                 return _response;
             }
             _response.Success = false;
