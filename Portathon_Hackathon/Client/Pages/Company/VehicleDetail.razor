@@ -1,0 +1,35 @@
+﻿@page "/Company/"
+<h3>VehicleDetail</h3>
+<h4 class="card-title mt-4 text-xl-center"> <strong> Vehicles</strong> </h4>
+@*@foreach (var item in _company.Vehicles)
+{*@
+    <div class="container bcontent mt-4 bg-light">
+        <div class="card">
+            <div class="card-body text-end">
+
+                <button type="button" class="btn btn-danger btn-sm "@* @onclick="() => ConfirmDelete(item.VehicleId)"*@>
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+                <button type="button" class="btn btn-success btn-sm " @*@onclick="() => UpdateVehicleHandle(item.VehicleId)*@">
+                    <i class="fa-solid fa-pen"></i> Update
+                </button>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@item.Capacity</span></li>
+                    <li class="list-group-item"><strong>Technic Detail:</strong> <span id="technicDetail">@item.TechnicDetail</span></li>
+                    <li class="list-group-item"><strong>Plate Number:</strong> <span id="plateNumber">@item.PlateNumber</span></li>
+                    <li class="list-group-item"><strong>Chauffeur Name:</strong> <span id="chauffeurName">@item.ChauffeurName</span></li>
+                    <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@item.VehicleType</span></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+@*}*@
+@code { 
+
+}
