@@ -5,6 +5,7 @@ using Portathon_Hackathon.Server.Services.Abstract;
 using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
 using Portathon_Hackathon.Shared.Entities;
+using System.ComponentModel.Design;
 
 namespace Portathon_Hackathon.Server.Services.Concrete
 {
@@ -66,7 +67,29 @@ namespace Portathon_Hackathon.Server.Services.Concrete
      
         }
 
-        public async Task<ServiceResponse<List<VehicleDTO>>> GetAllVehicles(int companyId)
+        public async Task<ServiceResponse<List<VehicleReturnDTO>>> GetAllVehicles()
+        {
+            var vehicles = await _context.Vehicles.Include(opt => opt.Company).ToListAsync();
+            var responseData = _mapper.Map<List<VehicleReturnDTO>>(vehicles);
+
+            if (vehicles is null)
+            {
+                return new ServiceResponse<List<VehicleReturnDTO>>
+                {
+                    Data = null,
+                    Message = "There is no vehicle in the Platform yet",
+                    Success = false
+                };
+            }
+            return new ServiceResponse<List<VehicleReturnDTO>>
+            {
+                Data = responseData,
+                Success = true,
+                Message = "All vehicles is listed"
+            };
+        }
+
+        public async Task<ServiceResponse<List<VehicleDTO>>> GetAllVehiclesByCompanyId(int companyId)
         {
             var vehicles =await  _context.Vehicles.Where(opt => opt.CompanyId == companyId).ToListAsync();
             var responseData = _mapper.Map<List<VehicleDTO>>(vehicles);

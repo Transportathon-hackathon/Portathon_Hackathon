@@ -28,6 +28,25 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             var result = await _httpClient.DeleteAsync($"https://localhost:7237/api/Vehicle/delete?vehicleId={vehicleId}");
             return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
+
+        public async Task<ServiceResponse<List<VehicleReturnDTO>>> GetAllVehicles()
+        {
+            var result = await _httpClient.GetAsync("https://localhost:7237/api/Vehicle/getallvehicles");
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<List<VehicleReturnDTO>>>();
+        }
+
+        public async Task<ServiceResponse<VehicleDTO>> GetVehicleById(int vehicleId)
+        {
+            var result = await _httpClient.GetAsync($"https://localhost:7237/api/Vehicle?vehicleId={vehicleId}");
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<VehicleDTO>>();
+        }
+
+        public async Task<ServiceResponse<VehicleDTO>>UpdateVehicles(int vehicleId,VehicleDTO dto)
+        {
+                                                        
+            var result = await _httpClient.PutAsJsonAsync($"https://localhost:7237/api/Vehicle?vehicleId={vehicleId}", dto);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<VehicleDTO>>();
+        }
     }
     
 }

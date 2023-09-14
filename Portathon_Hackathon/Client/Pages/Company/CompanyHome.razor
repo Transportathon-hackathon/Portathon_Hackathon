@@ -1,13 +1,15 @@
 ﻿@page "/Company/Home"
+@using System.Text.Json;
 @inject ICompanyManager _companyManager
 @inject AuthenticationStateProvider _authStateProvider
+@inject NavigationManager _navigationManager
 @inject IToastService _toastService
 @inject IVehicleService _vehicleService
 @inject IJSRuntime _jsruntime
-@if(_company != null)
+@if (_company.ImageUrl != null && _company.CompanyName != null)
 {
 <div class="container bcontent text-center mt-4 bg-light">
-    <div class="card text-center" style="width: 750px;">
+    <div class="card text-center">
         <div class="row no-gutters">
             <div class="col-sm-5">
                 <img class="card-img" src="/image/@_company.ImageUrl" alt="Suresh Dasari Card">
@@ -22,21 +24,27 @@
             </div>
         </div>
     </div>
-    </div>
-    <h4 class="card-title"> Vehicles </h4>
+ </div>
+
     if(_company.Vehicles != null)
     { 
+        <h4 class="card-title mt-4 text-xl-center"> <strong> Vehicles</strong> </h4>
         @foreach (var item in _company.Vehicles)
         {
-            <div class="container bcontent text-center mt-4 bg-light">
-                <div class="card text-center" style="width: 750px;">
-                    <div class="card">
-                        <div class="card-body">
-                            <button type="button" class="btn btn-danger btn-sm float-right" @onclick="() => ConfirmDelete(item.VehicleId)">
+            <div class="container bcontent mt-4 bg-light">
+                <div class="card">
+                        <div class="card-body text-end"> 
+
+                            <button type="button" class="btn btn-danger btn-sm " @onclick="() => ConfirmDelete(item.VehicleId)">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
+                        <button type="button" class="btn btn-success btn-sm " @onclick="() => UpdateVehicleHandle(item.VehicleId)">
+                                <i class="fa-solid fa-pen"></i> Update
+                            </button>
+                        </div>
 
-                            <h5 class="card-title"> <strong> Details About The Vehicle </strong></h5>
+                         <div class="card-body">   
+                            <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@item.Capacity</span></li>
                                 <li class="list-group-item"><strong>Technic Detail:</strong> <span id="technicDetail">@item.TechnicDetail</span></li>
@@ -45,7 +53,7 @@
                                 <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@item.VehicleType</span></li>
                             </ul>
                         </div>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -65,6 +73,7 @@
 @code {
     private Company _company = new Company();
     private string message = string.Empty;
+    private string messageUpdate = string.Empty;
     private string messageDelete = string.Empty;
     protected override async Task OnInitializedAsync()
     {
@@ -93,6 +102,7 @@
         }
     }
 
+
     private async Task DeleteVehicleAsync(int vehicleId)
     {
         var resultDelVehicle = await _vehicleService.DeleteVehicle(vehicleId);
@@ -106,5 +116,10 @@
         {
             _toastService.ShowError(messageDelete);
         }
+    }
+    private void UpdateVehicleHandle(int vehicleId)
+    {
+        _navigationManager.NavigateTo($"/Company/UpdateVehicle/{vehicleId}");
+
     }
 }

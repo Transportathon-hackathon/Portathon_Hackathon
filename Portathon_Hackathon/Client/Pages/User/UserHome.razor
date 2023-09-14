@@ -1,0 +1,54 @@
+﻿@page "/User/Home"
+@inject IVehicleService _vehicleService
+    @if(vehicles != null)
+    {
+    @foreach (var item in vehicles)
+        {
+             <div class="container bcontent text-center mt-4 bg-light">
+            <div class="card text-center" style="width: 750px;">
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="btn btn-info btn-sm float-right" @*@onclick="() => ConfirmDelete(item.VehicleId)"*@>
+                            <i class="fa-solid fa-truck mr-1"></i>Rezervation Request
+                    </button>
+
+                    <h5 class="card-title"> <strong> Details About The Vehicle </strong></h5>
+                    <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Campany Name:</strong> <span id="capacity">@item.CompanyName</span></li>
+                        <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@item.Capacity</span></li>
+                        <li class="list-group-item"><strong>Technic Detail:</strong> <span id="technicDetail">@item.TechnicDetail</span></li>
+                        <li class="list-group-item"><strong>Plate Number:</strong> <span id="plateNumber">@item.PlateNumber</span></li>
+                        <li class="list-group-item"><strong>Chauffeur Name:</strong> <span id="chauffeurName">@item.ChauffeurName</span></li>
+                        <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@item.VehicleType</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    }   
+
+    }else
+    {
+        <strong>You have no Vehiclse yet</strong>
+    }
+
+
+
+
+@code {
+
+    List<VehicleReturnDTO> vehicles = new List<VehicleReturnDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result =await _vehicleService.GetAllVehicles();
+       
+        if(result.Success == true)
+        {
+            vehicles = result.Data;
+        }
+
+    }
+
+}
