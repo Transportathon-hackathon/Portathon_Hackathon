@@ -20,6 +20,7 @@ namespace Portathon_Hackathon.Shared.Entities
         public string ChauffeurName { get; set; }   
         public int CompanyId { get; set; }  
         public string VehicleType { get; set; }
+        public string ImageUrl { get; set; }
         [JsonIgnore]
         public Company Company { get; set; }
 

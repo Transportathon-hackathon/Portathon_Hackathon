@@ -15,7 +15,7 @@ namespace Portathon_Hackathon.Client.Services.Helper
             _httpClient = httpClient;
         }
 
-        public async Task<bool> FileUploadAsync(IFileListEntry file, string folderName)
+        public async Task<bool> FileUploadAsync(IFileListEntry file, string folderName,int type)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace Portathon_Hackathon.Client.Services.Helper
 
                     }
                 };
-                var response = await _httpClient.PostAsync("https://localhost:7237/api/UploadFile/FileUploadAsync", content);
+                var response = await _httpClient.PostAsync($"https://localhost:7237/api/UploadFile/FileUploadAsync/{type}", content);
                 var contentresult = await response.Content.ReadAsStringAsync();
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<bool>(contentresult);
                 return result;

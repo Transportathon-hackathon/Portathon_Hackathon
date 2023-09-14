@@ -14,8 +14,8 @@ namespace Portathon_Hackathon.Server.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
         [HttpPost]
-        [Route("FileUploadAsync")]
-        public async Task<bool> FileUploadAsync()
+        [Route("FileUploadAsync/{type}")]
+        public async Task<bool> FileUploadAsync([FromRoute]int type)
         {
 
 
@@ -31,16 +31,26 @@ namespace Portathon_Hackathon.Server.Controllers
                     //        await file.CopyToAsync(stream);
                     //    }
                     //}
+                    string fileWay = string.Empty;
                     var file = HttpContext.Request.Form.Files.FirstOrDefault();
                     string name = file.Name;
                     string fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\" + @"\");
-                    filePath = filePath.Replace("\\Server\\", "\\Client\\");
-                    if (!Directory.Exists(filePath))
+                    if(type == 1)
                     {
-                        Directory.CreateDirectory(filePath);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\" + @"\");
+
                     }
-                    using (var stream = new FileStream(filePath + fileName, FileMode.OpenOrCreate))
+                    else if(type == 2)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\vehicle" + @"\");
+                        fileWay = filePath;
+                    }
+                    fileWay = fileWay.Replace("\\Server\\", "\\Client\\");
+                    if (!Directory.Exists(fileWay))
+                    {
+                        Directory.CreateDirectory(fileWay);
+                    }
+                    using (var stream = new FileStream(fileWay + fileName, FileMode.OpenOrCreate))
                     {
                         await file.CopyToAsync(stream);
                     }

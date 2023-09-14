@@ -12,9 +12,12 @@
                 <div class="form-group col-5">
                     <label for="vehicleType" class="form-label">Vehicle Type</label>
                     <select class="form-control" id="vehicleType" @bind="requestDTO.RequestType">
-                        <option value="Truck">Truck</option>
-                        <option value="Lory">Lory</option
-                        <option value="Truck">Truck</option>
+                        <option value="HometoHomeTransport">HometoHomeTransport</option>
+                        <option value="OfficeTransport">OfficeTransport</option
+                        <option value="LargeCapacityTransport">LargeCapacityTransport</option>
+                         <option value="MostlyObjectsTransport">MostlyObjectsTransport</option>
+  
+        
                     </select>
                 </div>
                 <div class="form-group col-5">
@@ -55,11 +58,12 @@
 
         var result =await _requestManager.MakeRequest(requestDTO);
 
-        if(result.Success != true)
+        if(result.Success == true)
         {
-            _toastService.ShowError(result.Message);
+            _toastService.ShowSuccess(result.Message);
+            _navigationManager.NavigateTo("/Users/Requests");
         }
-
-        _toastService.ShowSuccess(result.Message);
+         _toastService.ShowError(result.Message);
+        
     }
 }

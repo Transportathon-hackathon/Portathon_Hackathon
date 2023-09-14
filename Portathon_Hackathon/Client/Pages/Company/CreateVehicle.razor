@@ -1,8 +1,9 @@
 ﻿@page "/Company/CreateVehicle/{companyId:int}" 
+@using BlazorInputFile;
 @inject IVehicleService _vehiclseManager
 @inject NavigationManager _navigationManager
 @inject IToastService _toastrService
-
+@inject IFileUploadService _fileUploadService
 <EditForm Model="vehicleDTO" OnValidSubmit="CreateVehicleAsync">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="container ">
@@ -36,6 +37,13 @@
         <label for="chauffeurName" class="form-label">Chauffeur Name</label>
         <input type="text" class="form-control" id="chauffeurName" @bind="vehicleDTO.ChauffeurName">
     </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="companyLogo" class="form-label">Company Logo</label>
+
+                        <BlazorInputFile.InputFile OnChange="HandleImageUpload"></BlazorInputFile.InputFile>
+                    </div>
+                </div>
     <ValidationSummary></ValidationSummary>
     <br /><br />
     <button type="submit" class="btn btn-primary">Create Vehicle</button>
@@ -51,6 +59,8 @@
 
     [Parameter]
     public int companyId { get; set; }
+    IFileListEntry file;
+
 
     protected override void OnInitialized()
     {
@@ -60,12 +70,24 @@
         }
     }
 
+
+    private async Task HandleImageUpload(IFileListEntry[] files)
+    {
+        await Task.Run(() =>
+        {
+            file = files.FirstOrDefault();
+        });
+    }
+
     public async Task CreateVehicleAsync()
     {
+        await _fileUploadService.FileUploadAsync(file, "FolderName", 2);
+        vehicleDTO.ImageUrl = file.Name;
         var result =await _vehiclseManager.CreateVehicle(vehicleDTO, companyId);
 
         if(result.Success == true)
         {
+
             _toastrService.ShowSuccess("Vehicle Created");
             _navigationManager.NavigateTo("/Company/Home");
         }

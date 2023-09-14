@@ -6,7 +6,7 @@ namespace Portathon_Hackathon.Client.Services.Helper
     public interface IFileUploadService
     {
 
-        Task<bool> FileUploadAsync(IFileListEntry file, string folderName);
+        Task<bool> FileUploadAsync(IFileListEntry file, string folderName,int type);
 
     }
 }
