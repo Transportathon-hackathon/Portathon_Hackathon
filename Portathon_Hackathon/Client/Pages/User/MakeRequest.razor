@@ -1,6 +1,65 @@
-﻿@page "/"
-    
+﻿@page "/User/Request/{vehicleId:int}"
+@inject IRequestManager _requestManager;
+@inject IToastService _toastService;
+@inject NavigationManager _navigationManager
+<EditForm Model="requestDTO" OnValidSubmit="CreateRequestHandleAsync">
+
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 mt-5">
+
+                <div class="form-group col-5">
+                    <label for="vehicleType" class="form-label">Vehicle Type</label>
+                    <select class="form-control" id="vehicleType" @bind="requestDTO.RequestType">
+                        <option value="Truck">Truck</option>
+                        <option value="Lory">Lory</option
+                        <option value="Truck">Truck</option>
+                    </select>
+                </div>
+                <div class="form-group col-5">
+                    <label for="capacity" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="capacity" @bind="requestDTO.ContactConfirmation" step="0.01">
+                </div>
+
+                <div class="form-group col-5">
+                    <label for="technicDetail" class="form-label">Technical Details</label>
+                    <input type="text" class="form-control" id="technicDetail" @bind="requestDTO.RequestDetail">
+                </div>
+                <ValidationSummary></ValidationSummary>
+                <br /><br />
+                <button type="submit" class="btn btn-primary">Update Vehicle</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 @code {
-g
+
+    RequestDTO requestDTO = new RequestDTO();
+
+    [Parameter]
+    public int vehicleId { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedCompanyId))
+        {
+            vehicleId = parsedCompanyId;
+        }
+    }
+    private  async Task CreateRequestHandleAsync()
+    {
+        requestDTO.VehicleId = vehicleId;
+
+        var result =await _requestManager.MakeRequest(requestDTO);
+
+        if(result.Success != true)
+        {
+            _toastService.ShowError(result.Message);
+        }
+
+        _toastService.ShowSuccess(result.Message);
+    }
 }

@@ -27,7 +27,7 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             return await result.Content.ReadFromJsonAsync<ServiceResponse<RequestDTO>>();
         }
 
-        public Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updateId, RequestDTO )
+        public Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updateId, RequestDTO dto)
         {
             throw new NotImplementedException();
         }
