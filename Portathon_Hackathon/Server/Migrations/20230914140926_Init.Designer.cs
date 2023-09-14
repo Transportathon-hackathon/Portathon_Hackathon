@@ -12,8 +12,8 @@ using Portathon_Hackathon.Server.Context;
 namespace Portathon_Hackathon.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230912144647_Inits2")]
-    partial class Inits2
+    [Migration("20230914140926_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

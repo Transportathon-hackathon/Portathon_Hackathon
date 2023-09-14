@@ -73,7 +73,7 @@ else
         var response = await _companyManager.CreateCompany(company);
         if(response.Success != false)
         {
-            await _fileUploadService.FileUploadAsync(file, "FolderName");
+            await _fileUploadService.FileUploadAsync(file, "FolderName",1);
             isStatus = true;
             _navigationManager.NavigateTo("/Company/GetAllCompany");
 
