@@ -4,22 +4,21 @@
 
 namespace Portathon_Hackathon.Server.Migrations
 {
-    public partial class Init8 : Migration
+    public partial class Init4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "VehicleType",
+                name: "ImageUrl",
                 table: "Vehicles",
                 type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "VehicleType",
+                name: "ImageUrl",
                 table: "Vehicles");
         }
     }

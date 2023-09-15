@@ -4,6 +4,10 @@
 @inject NavigationManager _navigationManager
 @inject IToastService _toastrService
 @inject IFileUploadService _fileUploadService
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
 <EditForm Model="vehicleDTO" OnValidSubmit="CreateVehicleAsync">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="container ">
@@ -56,6 +60,8 @@
 
 
     public VehicleDTO vehicleDTO = new VehicleDTO();
+    IFileListEntry file;
+
 
     [Parameter]
     public int companyId { get; set; }
@@ -79,6 +85,11 @@
         });
     }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
     public async Task CreateVehicleAsync()
     {
         await _fileUploadService.FileUploadAsync(file, "FolderName", 2);
@@ -87,7 +98,11 @@
 
         if(result.Success == true)
         {
+<<<<<<< HEAD
 
+=======
+            await _fileUploadService.FileUploadAsync(file, "FolderName", 2);
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
             _toastrService.ShowSuccess("Vehicle Created");
             _navigationManager.NavigateTo("/Company/Home");
         }

@@ -14,8 +14,13 @@ namespace Portathon_Hackathon.Server.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
         [HttpPost]
+<<<<<<< HEAD
         [Route("FileUploadAsync/{type}")]
         public async Task<bool> FileUploadAsync([FromRoute]int type)
+=======
+        [Route("FileUploadAsync/{fileContent}")]
+        public async Task<bool> FileUploadAsync([FromRoute]int fileContent)
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
         {
 
 
@@ -23,6 +28,7 @@ namespace Portathon_Hackathon.Server.Controllers
             {
                 if (HttpContext.Request.Form.Files.Any())
                 {
+<<<<<<< HEAD
                     //foreach (var file in HttpContext.Request.Form.Files)
                     //{
                     //    var path = Path.Combine(_webHostEnvironment.ContentRootPath, "upload", file.FileName);
@@ -31,18 +37,30 @@ namespace Portathon_Hackathon.Server.Controllers
                     //        await file.CopyToAsync(stream);
                     //    }
                     //}
+=======
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
                     string fileWay = string.Empty;
                     var file = HttpContext.Request.Form.Files.FirstOrDefault();
                     string name = file.Name;
                     string fileName = Path.GetFileName(file.FileName);
+<<<<<<< HEAD
                     if(type == 1)
+=======
+                    if (fileContent == 1)
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
                     {
                         var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\" + @"\");
 
                     }
+<<<<<<< HEAD
                     else if(type == 2)
                     {
                         var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\vehicle" + @"\");
+=======
+                    else if (fileContent == 2)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\image\vehicles" + @"\");
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
                         fileWay = filePath;
                     }
                     fileWay = fileWay.Replace("\\Server\\", "\\Client\\");

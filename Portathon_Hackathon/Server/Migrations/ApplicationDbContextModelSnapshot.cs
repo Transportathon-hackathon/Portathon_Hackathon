@@ -218,7 +218,10 @@ namespace Portathon_Hackathon.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
+<<<<<<< HEAD
                         .IsRequired()
+=======
+>>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PlateNumber")
