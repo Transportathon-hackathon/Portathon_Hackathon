@@ -9,6 +9,7 @@ namespace Portathon_Hackathon.Shared.DTO
 {
     public class RequestDTO
     {
+        public int UserId { get; set; }
         public RequestType RequestType { get; set; }
         public int VehicleId { get; set; }
         public string RequestDetail { get; set; }

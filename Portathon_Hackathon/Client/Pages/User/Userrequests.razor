@@ -1,14 +1,48 @@
-﻿@page "/User/Request"
+﻿@page "/User/Request/{userId:int}"
+@inject IRequestManager _requestManager
+@inject NavigationManager _navigationManager
+@foreach(var item in requests)
+{
+    
+<div class="container bcontent mt-4 bg-light">
+    <div class="card">
 
-  @*    public string RequestType { get; set; }
-        public string RequestDetail { get; set; }
-        public string ContactConfirmation { get; set; }*@
-       
-        <div class="car">
-
-
+        <div class="card-body">
+            <h5 class="card-title text-center"> <strong> Details About The Request </strong></h5>
+           
+            <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Contact Confirmation:</strong> <span id="capacity">@item.ContactConfirmation</span></li>
+                    <li class="list-group-item"><strong>Request Detail:</strong> <span id="technicDetail">@item.RequestDetail</span></li>
+                    <li class="list-group-item"><strong>Request Type </strong> <span id="plateNumber">@item.RequestType</span></li>
+            </ul>
         </div>
 
-@code {
+      @*  <div class="card-body text-end mb-0">
+            <button type="button" class="btn btn-info btn-sm " @onclick="() => SeeDetailHandleAsync(item.VehicleId)">
+                <i class="fas fa-trash"></i> See Details
+            </button>
 
+        </div>*@
+
+    </div>
+</div>
+
+
+}
+
+@code {
+    private List<RequestDTO> requests = new List<RequestDTO>();
+
+    [Parameter]
+    public int userId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+        await _requestManager.GetAllRequestByUserId(userId);
+
+    }
 }

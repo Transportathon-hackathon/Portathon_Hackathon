@@ -73,15 +73,29 @@
         var result = await _authManager.Login(user);
         if (result.Success)
         {
+
+          
+
             var absoluteUri = new Uri(_navigationManager.Uri);
             var queryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
             ReturnPath = queryParam["returnUrl"];
             await _localStorage.SetItemAsync("authToken", result.Data);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
+            string? role = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Claims
+         .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+            Console.WriteLine(role);
+            Role = role;
 
             if (string.IsNullOrEmpty(ReturnPath))
             {
-                _navigationManager.NavigateTo("/Company/Home");
+                if(role =="Company")
+                {
+                    _navigationManager.NavigateTo("/Company/Home");
+                }
+                if(role == "User")
+                {
+                    _navigationManager.NavigateTo("/User/Home");
+                }
 
             }
             else

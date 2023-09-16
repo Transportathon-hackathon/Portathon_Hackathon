@@ -12,7 +12,9 @@
                         <button type="button" class="btn btn-info btn-sm" @onclick="() => HandleMakeRequest(item.VehicleId)">
                             <i class="fa-solid fa-truck mr-1"></i>Rezervation Request
                     </button>
-
+                        <div class="col-sm-5 text-center">
+                            <img class="card-img" src="/image/vehicles/@item.ImageUrl" alt="Suresh Dasari Card">
+                        </div>
                         <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
                         <ul class="list-group list-group-flush text-start">
                             <li class="list-group-item"><strong>Campany Name:</strong> <span id="capacity">@item.CompanyName</span></li>

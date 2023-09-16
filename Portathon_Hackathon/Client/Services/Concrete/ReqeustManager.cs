@@ -21,15 +21,21 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
+        public async Task<ServiceResponse<List<RequestDTO>>> GetAllRequestByUserId(int userId)
+        {
+            var result = await _httpClient.GetAsync($"https://localhost:7237/api/Request{userId}");
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<List<RequestDTO>>>();
+        }
+
         public async Task<ServiceResponse<RequestDTO>> MakeRequest(RequestDTO dto)
         {
             var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Request", dto);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<RequestDTO>>();
         }
 
-        public Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updateId, RequestDTO dto)
+        public async Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updatedId, RequestDTO dto)
         {
-            throw new NotImplementedException();
+           throw new NotImplementedException();
         }
     }
 }
