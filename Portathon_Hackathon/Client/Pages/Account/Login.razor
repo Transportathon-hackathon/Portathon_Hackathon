@@ -6,10 +6,11 @@
 @inject NavigationManager _navigationManager
 @inject ILocalStorageService _localStorage
 @inject AuthenticationStateProvider _authenticationStateProvider
-
+@inject IToastService _toastService
 
 <div class="container">
     <div class="row justify-content-center">
+        
         <div class="col-md-6">
             <!-- Logo or Image -->
             <div class="text-center mb-4">
@@ -17,6 +18,7 @@
             </div>
 
             <EditForm Model="user" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
                 <!-- Email input -->
                 <div class="form-group">
                     <label for="form2Example1">Email address</label>
@@ -51,6 +53,7 @@
                 <div class="text-center mt-3">
                     <p>Not a member? <a href="/Account/Register">Register</a></p>
                 </div>
+                <ValidationSummary></ValidationSummary>
             </EditForm>
         </div>
     </div>
@@ -61,6 +64,7 @@
 
 
 @code {
+    string? Role = "";
     UserLogin user = new UserLogin();
     private string message = string.Empty;
     public string ReturnPath { get; set; }
@@ -85,6 +89,10 @@
                 _navigationManager.NavigateTo("/" + ReturnPath);
             }
         }
-     
+        else
+        {
+            _toastService.ShowError(result.Message);
+        }
+
     }
 }

@@ -27,6 +27,7 @@
 
 
             <EditForm Model="user" OnValidSubmit="HandleRegistration">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
                 <!-- Name input -->
                 <div class="form-group">
                     <label for="Email" class="form-label">Email</label>
@@ -70,6 +71,7 @@
                     <button type="submit" class="btn btn-primary btn-block mb-3">Sign Up</button>
                     <p>Are you already a member? <a href="/Account/Login">Sign in</a></p>
                 </div>
+                <ValidationSummary></ValidationSummary>
             </EditForm>
         </div>
     </div>

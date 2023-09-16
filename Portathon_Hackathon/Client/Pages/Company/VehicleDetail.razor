@@ -93,7 +93,7 @@ else
         {
 
             crewMemberDTO.RemoveAll(opt => opt.Id == id);
-            StateHasChanged();
+            await OnInitializedAsync();
 
             _toastService.ShowSuccess(result.Message);
         }
@@ -119,7 +119,7 @@ else
         {
             crewMemberDTO.Add(dto);
             _toastService.ShowSuccess(result.Message);
-            StateHasChanged();
+            await OnInitializedAsync();
             AddMember = false;
         }
         else
