@@ -4,13 +4,16 @@
 @inject NavigationManager _navigationManager;
 @inject IToastService _toastService
 @inject IJSRuntime jsRuntime;
+@inject AuthenticationStateProvider _authStateProvider
+@if (Roles == "Company")
+{
 
-<div class="container bcontent mt-4 bg-light">
+    <div class="container bcontent mt-4 bg-light">
         <div class="card">
             <div class="card-body text-end">
 
-                 <button type="button" class="btn btn-danger btn-sm " @onclick="() => AddCrevMember(vehicleId,crew)" >
-                <i class="fas fa-plus"></i> Add Crew Member
+                <button type="button" class="btn btn-danger btn-sm " @onclick="() => AddCrevMember(vehicleId,crew)" >
+                    <i class="fas fa-plus"></i> Add Crew Member
                 </button>
             </div>
 
@@ -29,43 +32,49 @@
 
         <h2><strong> Crew Members </strong></h2>
 
-    @foreach(var item in crewMemberDTO)
-    {
-        <div class="card">
+        @foreach (var item in crewMemberDTO)
+        {
+            <div class="card">
 
-            <div class="card-body text-start">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>MemberName:</strong> <span id="MemberName">@item.MemberName</span></li>
-                </ul>
-                <div class="text-end"> 
-                    <button type="button" class="btn btn-danger btn-sm " @onclick="() => DeleteCrevMember(item.Id)">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
+                <div class="card-body text-start">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>MemberName:</strong> <span id="MemberName">@item.MemberName</span></li>
+                    </ul>
+                    <div class="text-end"> 
+                        <button type="button" class="btn btn-danger btn-sm " @onclick="() => DeleteCrevMember(item.Id)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
                 </div>
+
             </div>
 
-        </div>
-
-    }
-</div>
+        }
+    </div>
     @if (AddMember == true)
     {
 
-    <EditForm Model="crew">
+        <EditForm Model="crew">
             <div class="row mt-5">
                 <div class="col-md-6 mb-3">
                     <label for="membeName" class="form-label">Crew Member's Name</label>
-                <input type="text" class="form-control" id="membeName" placeholder="Crew Name" @bind="crew.MemberName" required>
+                    <input type="text" class="form-control" id="membeName" placeholder="Crew Name" @bind="crew.MemberName" required>
                 </div>
             </div>
 
             <div class="mt-3">
                 <button type="submit" class="btn btn-primary" @onclick="() => CompleteAddOperation(vehicleId,crew)">Save Member</button>
             </div>
-    </EditForm>
+        </EditForm>
     }
 
+}
+else
+{
+    <_accessDenied></_accessDenied>
+}
 @code {
+    string? Roles = "";
     [Parameter]
     public int vehicleId{ get; set; }
     VehicleDTO vehicle = new VehicleDTO();
@@ -123,6 +132,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string? role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+       .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+
+        Roles = role;
 
         if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedVehicleId))
         {

@@ -7,8 +7,9 @@
 @inject IVehicleService _vehicleService;
 @inject IToastService _toastService;
 @inject NavigationManager _navigationManager
-
-
+@inject AuthenticationStateProvider _authStateProvider
+@if(Roles=="Company")
+{
 <EditForm Model="vehicleDTO" OnValidSubmit="UpdateVehicleHandleAsync">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="container ">
@@ -49,12 +50,15 @@
             </div>
         </div>
     </div>
-</EditForm>
-
+    </EditForm>
+}
+else
+{
+    <_accessDenied></_accessDenied>
+}
 
 @code {
-
-
+    string? Roles = "";
     [Parameter]
     public int vehicleId { get; set; }
     public VehicleDTO vehicleDTO = new VehicleDTO();
@@ -63,7 +67,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string? role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+       .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
 
+        Roles = role;
         if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedVehicleId))
         {
             vehicleId = parsedVehicleId;
