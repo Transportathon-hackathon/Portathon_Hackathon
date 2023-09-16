@@ -12,43 +12,17 @@ using Portathon_Hackathon.Server.Context;
 namespace Portathon_Hackathon.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230914210731_addedVehicleImageUrl")]
-    partial class addedVehicleImageUrl
+    [Migration("20230909085815_Init4")]
+    partial class Init4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.15")
+                .HasAnnotation("ProductVersion", "6.0.21")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
-                {
-                    b.Property<int>("CompanyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"), 1L, 1);
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CompanyId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Companies");
-                });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.CrewMember", b =>
                 {
@@ -110,9 +84,6 @@ namespace Portathon_Hackathon.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("RequestDetail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -124,14 +95,9 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("int");
-
                     b.HasKey("RequestId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("VehicleId");
 
                     b.ToTable("Requests");
                 });
@@ -150,10 +116,6 @@ namespace Portathon_Hackathon.Server.Migrations
 
                     b.Property<int>("RequestId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ReservationCase")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime2");
@@ -209,17 +171,11 @@ namespace Portathon_Hackathon.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleId"), 1L, 1);
 
-                    b.Property<decimal>("Capacity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ChauffeurName")
+                    b.Property<string>("Capacity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("ChauffeurName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -231,26 +187,12 @@ namespace Portathon_Hackathon.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VehicleType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("VehicleType")
+                        .HasColumnType("int");
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("CompanyId");
-
                     b.ToTable("Vehicles");
-                });
-
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
-                {
-                    b.HasOne("Portathon_Hackathon.Shared.Entities.User", "User")
-                        .WithOne("Company")
-                        .HasForeignKey("Portathon_Hackathon.Shared.Entities.Company", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.CrewMember", b =>
@@ -283,15 +225,7 @@ namespace Portathon_Hackathon.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Portathon_Hackathon.Shared.Entities.Vehicle", "Vehicle")
-                        .WithMany("requests")
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("User");
-
-                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Reservation", b =>
@@ -305,22 +239,6 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.Navigation("Request");
                 });
 
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Vehicle", b =>
-                {
-                    b.HasOne("Portathon_Hackathon.Shared.Entities.Company", "Company")
-                        .WithMany("Vehicles")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
-                {
-                    b.Navigation("Vehicles");
-                });
-
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Reservation", b =>
                 {
                     b.Navigation("Evaluation")
@@ -329,17 +247,12 @@ namespace Portathon_Hackathon.Server.Migrations
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.User", b =>
                 {
-                    b.Navigation("Company")
-                        .IsRequired();
-
                     b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Vehicle", b =>
                 {
                     b.Navigation("CrewMembers");
-
-                    b.Navigation("requests");
                 });
 #pragma warning restore 612, 618
         }

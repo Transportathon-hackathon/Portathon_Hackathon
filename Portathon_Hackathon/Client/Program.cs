@@ -18,6 +18,8 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 builder.Services.AddScoped<IRequestManager, ReqeustManager>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
+builder.Services.AddScoped<ICrewManager, CrewManager>();
+builder.Services.AddScoped<IFileManager, FileManager>();
 builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portathon_Hackathon.Server.Context;
 
@@ -11,9 +12,10 @@ using Portathon_Hackathon.Server.Context;
 namespace Portathon_Hackathon.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230911104751_InitAfterPull")]
+    partial class InitAfterPull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,13 +39,7 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("CompanyId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Companies");
                 });
@@ -217,10 +213,6 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PlateNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -238,17 +230,6 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Vehicles");
-                });
-
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
-                {
-                    b.HasOne("Portathon_Hackathon.Shared.Entities.User", "User")
-                        .WithOne("Company")
-                        .HasForeignKey("Portathon_Hackathon.Shared.Entities.Company", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.CrewMember", b =>
@@ -327,9 +308,6 @@ namespace Portathon_Hackathon.Server.Migrations
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.User", b =>
                 {
-                    b.Navigation("Company")
-                        .IsRequired();
-
                     b.Navigation("Requests");
                 });
 

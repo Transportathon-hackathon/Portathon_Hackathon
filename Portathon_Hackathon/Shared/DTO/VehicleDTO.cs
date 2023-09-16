@@ -15,8 +15,8 @@ namespace Portathon_Hackathon.Shared.DTO
         public string TechnicDetail { get; set; }
         [Required(ErrorMessage = "Plate Number is Required")]
         public string PlateNumber { get; set; }
-        public string ImageUrl { get; set; }
         public string ChauffeurName { get; set; }
+        public string  ImageUrl { get; set; }
     }
 
 

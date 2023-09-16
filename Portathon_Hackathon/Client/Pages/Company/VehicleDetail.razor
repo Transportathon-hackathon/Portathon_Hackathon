@@ -1,1 +1,147 @@
-﻿
+﻿@page "/Company/VehicleDetail/{vehicleId:int}"
+@inject IVehicleService _vehicleService
+@inject ICrewManager _crewMember;
+@inject NavigationManager _navigationManager;
+@inject IToastService _toastService
+@inject IJSRuntime jsRuntime;
+
+<div class="container bcontent mt-4 bg-light">
+        <div class="card">
+            <div class="card-body text-end">
+
+                 <button type="button" class="btn btn-danger btn-sm " @onclick="() => AddCrevMember(vehicleId,crew)" >
+                <i class="fas fa-plus"></i> Add Crew Member
+                </button>
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@vehicle.Capacity</span></li>
+                    <li class="list-group-item"><strong>Technic Detail:</strong> <span id="technicDetail">@vehicle.TechnicDetail</span></li>
+                    <li class="list-group-item"><strong>Plate Number:</strong> <span id="plateNumber">@vehicle.PlateNumber</span></li>
+                    <li class="list-group-item"><strong>Chauffeur Name:</strong> <span id="chauffeurName">@vehicle.ChauffeurName</span></li>
+                    <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@vehicle.VehicleType</span></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <h2><strong> Crew Members </strong></h2>
+
+    @foreach(var item in crewMemberDTO)
+    {
+        <div class="card">
+
+            <div class="card-body text-start">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>MemberName:</strong> <span id="MemberName">@item.MemberName</span></li>
+                </ul>
+                <div class="text-end"> 
+                    <button type="button" class="btn btn-danger btn-sm " @onclick="() => DeleteCrevMember(item.Id)">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>
+    @if (AddMember == true)
+    {
+
+    <EditForm Model="crew">
+            <div class="row mt-5">
+                <div class="col-md-6 mb-3">
+                    <label for="membeName" class="form-label">Crew Member's Name</label>
+                <input type="text" class="form-control" id="membeName" placeholder="Crew Name" @bind="crew.MemberName" required>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary" @onclick="() => CompleteAddOperation(vehicleId,crew)">Save Member</button>
+            </div>
+    </EditForm>
+    }
+
+@code {
+    [Parameter]
+    public int vehicleId{ get; set; }
+    VehicleDTO vehicle = new VehicleDTO();
+    CrewMemberDTO crew = new CrewMemberDTO();
+
+    public bool AddMember { get; set; } = false;
+
+    List<CrewMemberDTO> crewMemberDTO = new List<CrewMemberDTO>();
+
+
+    private async Task DeleteCrevMember(int id)
+    {
+        var result = await _crewMember.DeleteCrewMemberById(id);
+
+        if(result.Success == true)
+        {
+
+            crewMemberDTO.RemoveAll(opt => opt.Id == id);
+            StateHasChanged();
+
+            _toastService.ShowSuccess(result.Message);
+        }
+        else
+        {
+            _toastService.ShowError(result.Message);
+        }
+
+    }
+
+    private  async Task AddCrevMember(int vechicleId, CrewMemberDTO dto)
+    {
+        AddMember = true;
+    }
+
+
+    private async Task CompleteAddOperation(int vechicleId, CrewMemberDTO dto)
+    {
+
+        var result =await _crewMember.AddCrewMemberToVehicle(vechicleId, dto);
+
+        if(result.Success == true)
+        {
+            crewMemberDTO.Add(dto);
+            _toastService.ShowSuccess(result.Message);
+            StateHasChanged();
+            AddMember = false;
+        }
+        else
+        {
+            _toastService.ShowError(result.Message);
+        }
+
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedVehicleId))
+        {
+            vehicleId = parsedVehicleId;
+        }
+        var resultVehcileDTO =await _vehicleService.GetVehicleById(vehicleId);
+        var resultCrews = await _crewMember.GetAllCrewMembersByVehicleId(vehicleId);
+        if(resultCrews.Data != null)
+        {
+            crewMemberDTO = resultCrews.Data;
+        }
+
+        if(resultVehcileDTO.Data != null)
+        {
+            vehicle = resultVehcileDTO.Data;
+        }
+        else
+        {
+            _toastService.ShowError(resultVehcileDTO.Message);
+        }
+    }
+}

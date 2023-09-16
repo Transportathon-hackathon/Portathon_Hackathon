@@ -21,11 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-    <Folder Include="wwwroot\image\vehicle\" />
-=======
     <Folder Include="wwwroot\image\vehicles\" />
->>>>>>> b7796df013d6e994696c8439fae0c7b728fcec6c
   </ItemGroup>
 
 </Project>

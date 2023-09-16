@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Portathon_Hackathon.Shared.Entities
@@ -20,8 +19,7 @@ namespace Portathon_Hackathon.Shared.Entities
         [AllowNull]
         public User User { get; set; }
         public string CompanyName { get; set; }
-        public string? ImageUrl { get; set; }
-        [JsonIgnore]
+        public string? ImageUrl { get; set; }    
         public List<Vehicle> Vehicles { get; set; } 
 
     } 

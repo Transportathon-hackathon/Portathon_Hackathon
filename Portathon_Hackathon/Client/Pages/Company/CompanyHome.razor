@@ -46,7 +46,7 @@
                          <div class="card-body">   
                             <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
                         <div class="col-sm-5 text-center">
-                            <img class="card-img" src="/image/vehicle/@item.ImageUrl" alt="Suresh Dasari Card">
+                            <img class="card-img" src="/image/vehicles/@item.ImageUrl" alt="Suresh Dasari Card">
                         </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Capacity:</strong> <span id="capacity">@item.Capacity</span></li>
@@ -55,6 +55,13 @@
                                 <li class="list-group-item"><strong>Chauffeur Name:</strong> <span id="chauffeurName">@item.ChauffeurName</span></li>
                                 <li class="list-group-item"><strong>Vehicle Type:</strong> <span id="vehicleType">@item.VehicleType</span></li>
                             </ul>
+                        </div>
+
+                        <div class="card-body text-end mb-0">
+                            <button type="button" class="btn btn-info btn-sm " @onclick="() => SeeDetailHandleAsync(item.VehicleId)">
+                                <i class="fas fa-trash"></i> See Details
+                            </button>
+
                         </div>
                     
                 </div>
@@ -82,10 +89,10 @@
     {
         var resultCompanyId = await _companyManager.GetCompanyId();
         int  companyId = resultCompanyId.Data;
-        Console.WriteLine(companyId);
+      
 
         var result = await _companyManager.GetCompanyById(companyId);
-        Console.WriteLine(result);
+       
         if(result.Success == true)
         {
             _company = result.Data;
@@ -123,6 +130,11 @@
     private void UpdateVehicleHandle(int vehicleId)
     {
         _navigationManager.NavigateTo($"/Company/UpdateVehicle/{vehicleId}");
+
+    }
+    private void SeeDetailHandleAsync(int vehicleId)
+    {
+        _navigationManager.NavigateTo($"/Company/VehicleDetail/{vehicleId}");
 
     }
 }
