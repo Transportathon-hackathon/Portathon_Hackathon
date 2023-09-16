@@ -1,5 +1,6 @@
 ﻿@page "/User/Home"
 @inject IVehicleService _vehicleService
+@inject NavigationManager _navigationManager
     @if(vehicles != null)
     {
     @foreach (var item in vehicles)
@@ -8,7 +9,7 @@
             <div class="card text-center">
             <div class="card">
                     <div class="card-body text-end">
-                    <button type="button" class="btn btn-info btn-sm" @*@onclick="() => ConfirmDelete(item.VehicleId)"*@>
+                        <button type="button" class="btn btn-info btn-sm" @onclick="() => HandleMakeRequest(item.VehicleId)">
                             <i class="fa-solid fa-truck mr-1"></i>Rezervation Request
                     </button>
 
@@ -43,12 +44,17 @@
     protected override async Task OnInitializedAsync()
     {
         var result =await _vehicleService.GetAllVehicles();
-       
+
         if(result.Success == true)
         {
             vehicles = result.Data;
         }
 
+    }
+
+    private async Task HandleMakeRequest(int VehicleId)
+    {
+        _navigationManager.NavigateTo($"User/Request/{VehicleId}");
     }
 
 }
