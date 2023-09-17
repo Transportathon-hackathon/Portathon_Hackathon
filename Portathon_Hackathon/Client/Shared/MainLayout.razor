@@ -15,7 +15,11 @@
         <div class="top-row px-4">
                     <AuthorizeView>
                         <Authorized>
-
+                                    <NavLink class="nav-link" type="button" @onclick="GoMessages">
+                                        <span class="p-2">
+                                            Messages
+                                        </span>
+                                    </NavLink>
                                 <NavLink class="nav-link" href="#">
                                     <span class="p-2">
                                         Welcome, @context.User.Identity.Name
@@ -66,5 +70,10 @@
         await _authenticationStateProvider.GetAuthenticationStateAsync();
         _navigationManager.NavigateTo("");
         await OnInitializedAsync();
+    }
+
+    private async Task GoMessages()
+    {
+        _navigationManager.NavigateTo("MessagePage");
     }
 }
