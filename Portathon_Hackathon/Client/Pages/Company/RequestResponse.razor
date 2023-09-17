@@ -1,0 +1,65 @@
+﻿@page "/Company/Requests/{requestId:int}"
+@inject NavigationManager _navigationManager
+@inject IReservationManager _reservationManager
+@inject IToastService _toastService
+
+
+<EditForm Model="reservationDto" OnValidSubmit="CreateResponseAsync">
+
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <div class="container ">
+      <div class="row justify-content-center">
+            <div class="col-md-10 mt-5">
+
+            <div class="form-group col-5">
+                <label for="vehicleType" class="form-label">Reservation Response</label>
+                <select class="form-control" id="vehicleType" @bind="reservationDto.ReservationCase">
+                    <option value="Rejected">Rejected</option>
+                    <option value="Accepted">Accepted</option>
+                </select>
+            </div>
+            <div class="form-group col-5">
+                <label for="capacity" class="form-label">Other Details to say</label>
+                <input type="text" class="form-control" id="otherDetails" @bind="reservationDto.OtherDetails" step="0.01">
+            </div>
+        </div>
+      </div>
+        <ValidationSummary></ValidationSummary>
+        <br /><br />
+        <button type="submit" class="btn btn-primary">Send Response</button>
+    </div>
+</EditForm>
+
+
+
+@code {
+
+    [Parameter]
+    public int requestId { get; set; }
+    ReservationDTO reservationDto = new ReservationDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedRequestId))
+        {
+            requestId = parsedRequestId;
+        }
+
+
+    }
+    private async Task CreateResponseAsync()
+    {
+        reservationDto.RequestId = requestId;
+        var result =await _reservationManager.ReservationFeedBack(requestId, reservationDto);
+
+        if(result.Success == true)
+        {
+            _toastService.ShowSuccess(result.Message);
+            _navigationManager.NavigateTo("/Company/Requests");
+        }
+        else
+        {
+            _toastService.ShowError(result.Message);
+        }
+    }
+}

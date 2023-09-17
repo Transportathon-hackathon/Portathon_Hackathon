@@ -121,8 +121,9 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             //}
 
             var reservationDto = _mapper.Map<List<ReservationReturnDTO>>(reservation);
-            
-            if(reservationDto == null)
+
+
+            if (reservationDto == null)
             {
                 return new ServiceResponse<List<ReservationReturnDTO>>
                 {

@@ -1,6 +1,7 @@
 ﻿using Portathon_Hackathon.Client.Services.Abstract;
 using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
+using Portathon_Hackathon.Shared.Entities;
 using System.Net.Http.Json;
 
 namespace Portathon_Hackathon.Client.Services.Concrete
@@ -25,7 +26,13 @@ namespace Portathon_Hackathon.Client.Services.Concrete
            
             return response;
         }
-        //https://localhost:7237/api/reservation?reservationId=1
+
+        public async Task<ServiceResponse<Reservation>> ReservationFeedBack(int requestId,ReservationDTO reservation)
+        {
+            var result = await _httpClient.PostAsJsonAsync($"https://localhost:7237/api/reservation", reservation);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<Reservation>>();
+           
+        }
 
     }
 }

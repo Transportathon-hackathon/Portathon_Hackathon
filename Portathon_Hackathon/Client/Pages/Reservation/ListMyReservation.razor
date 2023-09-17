@@ -1,6 +1,15 @@
 ﻿@page "/Reservation/MyReservations"
 @inject IReservationManager _reserveManager
+@inject AuthenticationStateProvider _authStateProvider
 <!-- Card -->
+@if(Roles == "Company")
+{
+    <h1>There is no access to this page as a company only users can make changes on rezervations</h1>
+}
+else
+{
+    
+
 @foreach (var item in _reservations)
 {
     <div class="card">
@@ -32,12 +41,19 @@
 
 }
 <!-- Card -->
-
+}
 @code {
     List<ReservationReturnDTO> _reservations = new List<ReservationReturnDTO>();
+    string? Roles = "User";
     protected override async Task OnInitializedAsync()
     {
+        string? role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+      .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+
+        Roles = role;
         var result = await _reserveManager.GetReservationByUser();
         _reservations = result.Data;
+
+       
     }
 }

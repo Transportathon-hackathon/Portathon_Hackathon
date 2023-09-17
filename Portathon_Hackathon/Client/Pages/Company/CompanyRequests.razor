@@ -1,0 +1,75 @@
+﻿@page "/Company/Requests"
+@inject IRequestManager _requestManager
+@inject AuthenticationStateProvider _authStateProvider
+@inject NavigationManager _navigationManager
+@inject ICompanyManager _comapnyManager
+@if (Roles == "Company")
+{
+    @foreach (var item in requests)
+    {
+        <div class="container bcontent mt-4 bg-light">
+            <div class="card">
+                <div class="card-body text-end">
+                    <button type="button" class="btn btn-info btn-sm" @onclick="() => RequestHandle(item.RequestId)">
+                        <i class="fa-solid fa-trash mr-1"></i>Response to Request
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center"> <strong> Details About The Request </strong></h5>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Contact Confirmation:</strong> <span id="capacity">@item.ContactConfirmation</span></li>
+                        <li class="list-group-item"><strong>Request Detail:</strong> <span id="technicDetail">@item.RequestDetail</span></li>
+                        <li class="list-group-item"><strong>Request Type </strong> <span id="plateNumber">@item.RequestType</span></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+    }
+   
+
+}
+else
+{
+    <_accessDenied></_accessDenied>
+}
+
+@code {
+    string? Roles = "Company";
+
+    List<Request> requests =new  List<Request>();
+    private int userId;
+    protected override async Task OnInitializedAsync()
+    {
+
+        var id = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+
+        var role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+
+        Roles = role;
+
+        userId = Convert.ToInt32(id);
+        var companyId =await _comapnyManager.GetCompanyId();
+
+        var result = await _requestManager.GetAllRequestForCompany(companyId.Data);
+
+        if(result.Success == true)
+        {
+            requests = result.Data;
+        }
+
+    }
+    private async Task RequestHandle(int requestId)
+    {
+        _navigationManager.NavigateTo($"/Company/Requests/{requestId}");
+    }
+
+
+
+
+}
