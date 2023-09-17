@@ -2,6 +2,7 @@
 using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
 using Portathon_Hackathon.Shared.Entities;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Net.Http.Json;
 
@@ -48,6 +49,13 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             var result = await _httpClient.GetAsync("https://localhost:7237/api/Company/getcompanyId");
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
         
+        }
+
+        public async Task<ServiceResponse<List<EvaluationDTO>>> GetEvaluationForCompany(int companyId)
+        {
+       
+            var result = await _httpClient.GetAsync($"https://localhost:7237/api/Company/{companyId}");
+            return await result.Content.ReadFromJsonAsync<ServiceResponse < List < EvaluationDTO >>> ();
         }
     }
 }

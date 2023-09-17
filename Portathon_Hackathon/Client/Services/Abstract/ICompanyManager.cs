@@ -11,5 +11,6 @@ namespace Portathon_Hackathon.Client.Services.Abstract
         Task<ServiceResponse<Company>> GetCompanyById(int companyId);
         Task<ServiceResponse<int>> GetCompanyId();
         Task<ServiceResponse<bool>> CheckCompany(int userId);
+        Task<ServiceResponse<List<EvaluationDTO>>> GetEvaluationForCompany(int companyId);
     }
 }

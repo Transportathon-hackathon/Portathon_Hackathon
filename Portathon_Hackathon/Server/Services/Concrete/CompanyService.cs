@@ -130,5 +130,41 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = true
             }; 
         }
+
+        public async Task<ServiceResponse<List<EvaluationDTO>>> GetEvaluationsForCompany(int companyId)
+        {
+            var valuationList = await _context.Evaluations.Where(x => x.CompanyId == companyId).ToListAsync();
+            var vehicleList = await _context.Vehicles.ToListAsync();
+            List<EvaluationDTO> _evaluationDTO = new List<EvaluationDTO>(); 
+            foreach (var item in valuationList)
+            {
+                foreach (var item1 in vehicleList)
+                {
+                    if (item.CompanyId == item1.CompanyId)
+                    {
+                         EvaluationDTO _model = new EvaluationDTO();
+                        var objDTO = _mapper.Map<EvaluationDTO>(item);
+                        _model = objDTO;    
+                        _evaluationDTO.Add(objDTO); 
+
+                    }
+                }
+            }
+            if (_evaluationDTO != null)
+            {
+                return new ServiceResponse<List<EvaluationDTO>>
+                {
+                    Data = _evaluationDTO,
+                    Success = true,
+                    Message = "Listed",
+                };
+            }
+            return new ServiceResponse<List<EvaluationDTO>>
+            {
+                Success = false,
+                Message = "Not found vote for this company",
+            };
+
+        }
     }
 }

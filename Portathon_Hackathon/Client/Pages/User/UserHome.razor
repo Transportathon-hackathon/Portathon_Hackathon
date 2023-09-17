@@ -16,7 +16,7 @@
                             <i class="fa-solid fa-truck mr-1"></i>Rezervation Request
                         </button>
                         <button type="button" class="btn btn-success btn-sm" @onclick="() => SeeDetailsHandle(item.CompanyId)">
-                            <i class="fa-solid fa-truck mr-1"></i>See Details
+                            <i class="fa-solid fa-truck mr-1"></i>See Evaluate
                         </button>
                         <div class="col-sm-5 text-center">
                             <img class="card-img" src="/image/vehicles/@item.ImageUrl" alt="Suresh Dasari Card">
@@ -67,7 +67,7 @@ else
     }
     private async Task SeeDetailsHandle(int companyId)
     {
-        _navigationManager.NavigateTo($"User/Company/{companyId}");
+        _navigationManager.NavigateTo($"Company/Evaluate/{companyId}");
     }
 
 

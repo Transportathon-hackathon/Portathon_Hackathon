@@ -1,0 +1,70 @@
+﻿@page "/Company/Evaluate/{companyId:int}"
+@inject ICompanyManager _companyManager
+
+<style>
+    /* Çemberin tasarımı */
+    .circle {
+        width: 100px;
+        height: 100px;
+        background-color: #3498db;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+    }
+</style>
+
+        <div class="col-6 mb-3">
+    <div class=""><strong>Total Average</strong></div>
+            <div class="circle">@Math.Round(TotalAverage)</div>
+        </div>
+
+@foreach (var item in _valuation)
+{
+    <div class="card mb-5 ">
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>
+                    <strong>
+                        @item.EvaluationMessage
+                    </strong>
+                </p>
+                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+            </blockquote>
+        </div>
+    </div>
+
+}
+
+@code {
+
+
+    [Parameter]
+    public int CompanyId { get; set; }
+    List<EvaluationDTO> _valuation = new List<EvaluationDTO>();
+    public decimal TotalAverage { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var obj = await _companyManager.GetEvaluationForCompany(CompanyId);
+        TotalAverage = CalculateAverage(obj.Data);
+        
+        _valuation = obj.Data;
+
+    }
+
+
+    private decimal CalculateAverage(List<EvaluationDTO> _model)
+    {
+        int counter = 0;
+        decimal total = 0;
+        foreach (var item in _model)
+        {
+            counter++;
+            total = total + item.EvaluationScore;
+        }
+        return total / counter;
+    }
+}

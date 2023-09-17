@@ -12,5 +12,6 @@ namespace Portathon_Hackathon.Server.Services.Abstract
         Task<ServiceResponse<List<CompanyDTO>>> GetAllCompanies();
         Task<ServiceResponse<int>> GetCompanyIdByUserId(int userId);
         Task<ServiceResponse<bool>> CompanyCreatedOrNot(int userId);
+        Task<ServiceResponse<List<EvaluationDTO>>> GetEvaluationsForCompany(int companyId);
     }
 }

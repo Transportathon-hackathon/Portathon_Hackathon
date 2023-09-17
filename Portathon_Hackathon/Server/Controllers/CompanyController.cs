@@ -73,5 +73,12 @@ namespace Portathon_Hackathon.Server.Controllers
             return BadRequest(result);
         }
 
+        [HttpGet("{companyId}")]
+        public async Task<ActionResult> GetCompanyEvaluate(int companyId)
+        {
+            var result = await _companyService.GetEvaluationsForCompany(companyId);
+            return Ok(result);
+        }
+
     }
 }
