@@ -1,0 +1,89 @@
+﻿@page "/User/Requests/{userId:int}"
+@inject IRequestManager _requestManager
+@inject NavigationManager _navigationManager
+@inject IToastService _toastService
+@inject AuthenticationStateProvider _authStateProvider
+
+@if (accessCheck == false)
+{
+    <_accessDenied></_accessDenied>
+}
+else
+{
+    @foreach (var item in requests)
+    {
+
+        <div class="container bcontent mt-4 bg-light">
+            <div class="card">
+                <div class="card-body text-end"> 
+                    <button type="button" class="btn btn-info btn-sm" @onclick="() => CancelRequestHandle(item.RequestId)">
+                        <i class="fa-solid fa-trash mr-1"></i>Cancel
+                    </button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center"> <strong> Details About The Request </strong></h5>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Contact Confirmation:</strong> <span id="capacity">@item.ContactConfirmation</span></li>
+                        <li class="list-group-item"><strong>Request Detail:</strong> <span id="technicDetail">@item.RequestDetail</span></li>
+                        <li class="list-group-item"><strong>Request Type </strong> <span id="plateNumber">@item.RequestType</span></li>
+                    </ul>
+                </div>
+
+                @*  <div class="card-body text-end mb-0">
+        <button type="button" class="btn btn-info btn-sm " @onclick="() => SeeDetailHandleAsync(item.VehicleId)">
+        <i class="fas fa-trash"></i> See Details
+        </button>
+
+        </div>*@
+
+            </div>
+        </div>
+    }
+}
+
+
+@code {
+    private List<RequestDTO> requests = new List<RequestDTO>();
+
+    bool accessCheck = true;
+
+    [Parameter]
+    public int userId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+        var checkId = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+
+        if(userId == Convert.ToInt32(checkId))
+        {
+            accessCheck = true;
+            var result = await _requestManager.GetAllRequestByUserId(userId);
+            requests = result.Data;
+        }
+        else
+        {
+            accessCheck = false;
+        }
+
+    }
+    private async Task CancelRequestHandle(int requestId)
+    {
+        var result = await _requestManager.DeleteRequest(requestId);
+
+        if (result.Success==true)
+        {
+            _toastService.ShowSuccess(result.Message);
+            await OnInitializedAsync();
+        }
+        else
+        {
+            _toastService.ShowError(result.Message);
+        }
+    }
+}

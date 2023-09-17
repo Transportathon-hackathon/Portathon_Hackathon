@@ -15,6 +15,7 @@ namespace Portathon_Hackathon.Server.Mapper
             CreateMap<Reservation, ReservationDTO>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Evaluation, EvaluationDTO>().ReverseMap();
+            CreateMap<Message, MessageDTO>().ReverseMap();
             CreateMap<Reservation, ReservationReturnDTO>()
                 .ForMember(dest => dest.User, src => src.MapFrom(opt => opt.Request.User)).ReverseMap();
             CreateMap<Vehicle, VehicleReturnDTO>()

@@ -22,6 +22,21 @@ namespace Portathon_Hackathon.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("MessageUser", b =>
+                {
+                    b.Property<int>("MessagesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessagesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("MessageUser");
+                });
+
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
                 {
                     b.Property<int>("CompanyId")
@@ -78,6 +93,9 @@ namespace Portathon_Hackathon.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EvaluationId"), 1L, 1);
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("EvaluationMessage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -85,15 +103,37 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.Property<decimal>("EvaluationScore")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ReservationId")
-                        .HasColumnType("int");
-
                     b.HasKey("EvaluationId");
 
-                    b.HasIndex("ReservationId")
-                        .IsUnique();
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Evaluations");
+                });
+
+            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeSpan")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Request", b =>
@@ -119,6 +159,9 @@ namespace Portathon_Hackathon.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -141,6 +184,9 @@ namespace Portathon_Hackathon.Server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"), 1L, 1);
+
+                    b.Property<bool>("IsReservationFinish")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OtherDetails")
                         .IsRequired()
@@ -240,6 +286,21 @@ namespace Portathon_Hackathon.Server.Migrations
                     b.ToTable("Vehicles");
                 });
 
+            modelBuilder.Entity("MessageUser", b =>
+                {
+                    b.HasOne("Portathon_Hackathon.Shared.Entities.Message", null)
+                        .WithMany()
+                        .HasForeignKey("MessagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Portathon_Hackathon.Shared.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
                 {
                     b.HasOne("Portathon_Hackathon.Shared.Entities.User", "User")
@@ -264,13 +325,13 @@ namespace Portathon_Hackathon.Server.Migrations
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Evaluation", b =>
                 {
-                    b.HasOne("Portathon_Hackathon.Shared.Entities.Reservation", "Reservation")
-                        .WithOne("Evaluation")
-                        .HasForeignKey("Portathon_Hackathon.Shared.Entities.Evaluation", "ReservationId")
+                    b.HasOne("Portathon_Hackathon.Shared.Entities.Company", "Company")
+                        .WithMany("Evaluations")
+                        .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Reservation");
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Request", b =>
@@ -316,13 +377,9 @@ namespace Portathon_Hackathon.Server.Migrations
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Company", b =>
                 {
-                    b.Navigation("Vehicles");
-                });
+                    b.Navigation("Evaluations");
 
-            modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.Reservation", b =>
-                {
-                    b.Navigation("Evaluation")
-                        .IsRequired();
+                    b.Navigation("Vehicles");
                 });
 
             modelBuilder.Entity("Portathon_Hackathon.Shared.Entities.User", b =>

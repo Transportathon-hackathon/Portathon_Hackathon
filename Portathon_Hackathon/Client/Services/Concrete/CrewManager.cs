@@ -6,7 +6,7 @@ using System.Net.Http.Json;
 
 namespace Portathon_Hackathon.Client.Services.Concrete
 {
-    public class CrewManager :ICrewManager
+    public class CrewManager : ICrewManager
     {
         private readonly HttpClient _httpClient;
 
@@ -36,5 +36,4 @@ namespace Portathon_Hackathon.Client.Services.Concrete
 
         }
     }
-
 }

@@ -20,7 +20,8 @@ namespace Portathon_Hackathon.Shared.Entities
         public User User { get; set; }
         public string CompanyName { get; set; }
         public string? ImageUrl { get; set; }    
-        public List<Vehicle> Vehicles { get; set; } 
+        public List<Vehicle> Vehicles { get; set; }
+        public List<Evaluation> Evaluations { get; set; }
 
     } 
 }

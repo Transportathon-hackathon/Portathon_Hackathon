@@ -1,0 +1,43 @@
+﻿@page "/Reservation/MyReservations"
+@inject IReservationManager _reserveManager
+<!-- Card -->
+@foreach (var item in _reservations)
+{
+    <div class="card">
+
+        <!-- Card image -->
+        <div class="view overlay">
+            <img class="card-img-top" src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).webp"
+                 alt="Card image cap">
+            <a href="#!">
+                <div class="mask rgba-white-slight"></div>
+            </a>
+        </div>
+
+        <!-- Card content -->
+        <div class="card-body">
+
+            <!-- Title -->
+            <h4 class="card-title">@item.OtherDetails</h4>
+            <!-- Text -->
+            <p class="card-text">
+               @item.ReservationCase
+            </p>
+            <!-- Button -->
+            <a href="/Reservation/UniqeReservation/@item.ReservationId" class="btn btn-primary">Rezervasyonu Görüntüle</a>
+
+        </div>
+
+    </div>
+
+}
+<!-- Card -->
+
+@code {
+    List<ReservationReturnDTO> _reservations = new List<ReservationReturnDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _reserveManager.GetReservationByUser();
+        _reservations = result.Data;
+    }
+}

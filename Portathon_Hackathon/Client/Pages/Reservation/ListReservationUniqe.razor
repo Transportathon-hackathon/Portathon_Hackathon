@@ -1,0 +1,130 @@
+﻿@page "/Reservation/UniqeReservation/{reservationId:int}"
+@using Portathon_Hackathon.Shared;
+@inject IEValuateManager _valuateManager;
+@inject IReservationManager _reservationManager
+@inject IJSRuntime _jsRuntime
+@inject IToastService _toastr
+
+
+
+
+<div class="card">
+
+    <!-- Card image -->
+    <div class="view overlay">
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).webp"
+             alt="Card image cap">
+        <a href="#!">
+            <div class="mask rgba-white-slight"></div>
+        </a>
+    </div>
+
+    <!-- Card content -->
+    <div class="card-body">
+
+        <!-- Title -->
+        <h4 class="card-title">@_returnDTO.OtherDetails</h4>
+        <!-- Text -->
+        <p class="card-text">
+            @_returnDTO.ReservationCase
+        </p>
+        <!-- Button -->
+     
+
+
+    </div>
+    <button type="button" class="btn btn-primary text-center"  @onclick="OpenModal">
+        Rezervasyonu Bitir
+    </button>
+
+</div>
+<!-- Button trigger modal -->
+<!-- Modal -->
+@*    public string EvaluationMessage { get; set; }
+
+        [Range(1, 5, ErrorMessage = "Evaluation score must be between 1 and 5.")]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal EvaluationScore { get; set; }
+        public int CompanyId { get; set; }*@
+<!-- Modal -->
+<EditForm Model="_valuationDTO" OnValidSubmit="SendEvaluation">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content mx-4">
+                <div class="modal-header">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="form2Example1">EValuation Message</label>
+                            <input type="text" id="form2Example1" @bind-value="_valuationDTO.EvaluationMessage" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="form2Example1">EValuation Score</label>
+                            <input type="number" id="form2Example1" @bind-value="_valuationDTO.EvaluationScore" class="form-control" />
+                            <ValidationMessage For="@(() => _valuationDTO.EvaluationScore)" ></ValidationMessage>
+                        </div>
+                    </div>
+             
+                    
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int reservationId { get; set; }
+    ReservationReturnDTO? _returnDTO = new ReservationReturnDTO();
+    ServiceResponse<ReservationReturnDTO> _dto = new ServiceResponse<ReservationReturnDTO>();
+    EvaluationDTO _valuationDTO = new EvaluationDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _reservationManager.GetReservationById(reservationId);
+
+        _returnDTO = response.Data;
+        _dto.Data = _returnDTO;
+
+    }
+
+    private async Task OpenModal()
+    {
+        if (_dto.Data.IsFinished == true)
+        {
+            _toastr.ShowError("Reservation already finished");
+        }
+        else
+        {
+            await _jsRuntime.InvokeVoidAsync("openModal");
+
+        }
+    }
+
+
+    private async Task SendEvaluation()
+    {
+        _valuationDTO.CompanyId = _returnDTO.CompanyId;
+        var response = await _valuateManager.CreateEValuateAsync(reservationId, _valuationDTO);
+        if (response.Success == true)
+        {
+            await CloseModal();
+            _toastr.ShowSuccess(response.Message);
+        }
+        await OnInitializedAsync();
+
+    }
+    private async Task CloseModal()
+    {
+        await _jsRuntime.InvokeVoidAsync("closeModal");
+    }
+}
+
+

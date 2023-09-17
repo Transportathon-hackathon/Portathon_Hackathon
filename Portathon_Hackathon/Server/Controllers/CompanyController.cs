@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Portathon_Hackathon.Server.Services.Abstract;
+using Portathon_Hackathon.Shared;
 using Portathon_Hackathon.Shared.DTO;
 using System.Security.Claims;
 
@@ -61,7 +62,16 @@ namespace Portathon_Hackathon.Server.Controllers
             }
             return BadRequest(result);  
         }
-
+        [HttpGet("checkcompany")]
+        public async Task<ActionResult> CompanyCreatedOrNot(int userId)
+        {
+            var result =await _companyService.CompanyCreatedOrNot(userId);
+            if(result.Success == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
 
     }
 }

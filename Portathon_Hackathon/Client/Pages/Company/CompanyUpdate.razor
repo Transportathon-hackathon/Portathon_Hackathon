@@ -3,53 +3,55 @@
 @using Blazored.Toast.Services;
 @using Portathon_Hackathon.Client.Services.Abstract;
 @using Portathon_Hackathon.Shared.DTO;
-
+@inject AuthenticationStateProvider _authStateProvider
 @inject IVehicleService _vehicleService;
 @inject IToastService _toastService;
 @inject NavigationManager _navigationManager
-@inject AuthenticationStateProvider _authStateProvider
-@if(Roles=="Company")
+
+@if (Roles == "Company")
 {
-<EditForm Model="vehicleDTO" OnValidSubmit="UpdateVehicleHandleAsync">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <div class="container ">
-        <div class="row justify-content-center">
-            <div class="col-md-10 mt-5">
 
-                <div class="form-group col-5">
-                    <label for="vehicleType" class="form-label">Vehicle Type</label>
-                    <select class="form-control" id="vehicleType" @bind="vehicleDTO.VehicleType">
-                        <option value="Truck">Truck</option>
-                        <option value="Lory">Lory</option>
-                    </select>
-                </div>
 
-                <div class="form-group col-5">
-                    <label for="capacity" class="form-label">Capacity</label>
-                    <input type="number" class="form-control" id="capacity" @bind="vehicleDTO.Capacity" step="0.01">
-                </div>
+    <EditForm Model="vehicleDTO" OnValidSubmit="UpdateVehicleHandleAsync">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-md-10 mt-5">
 
-                <div class="form-group col-5">
-                    <label for="technicDetail" class="form-label">Technical Details</label>
-                    <input type="text" class="form-control" id="technicDetail" @bind="vehicleDTO.TechnicDetail">
-                </div>
+                    <div class="form-group col-5">
+                        <label for="vehicleType" class="form-label">Vehicle Type</label>
+                        <select class="form-control" id="vehicleType" @bind="vehicleDTO.VehicleType">
+                            <option value="Truck">Truck</option>
+                            <option value="Lory">Lory</option>
+                        </select>
+                    </div>
 
-                <div class="form-group col-5">
-                    <label for="plateNumber" class="form-label">Plate Number</label>
-                    <input type="text" class="form-control" id="plateNumber" @bind="vehicleDTO.PlateNumber">
-                </div>
+                    <div class="form-group col-5">
+                        <label for="capacity" class="form-label">Capacity</label>
+                        <input type="number" class="form-control" id="capacity" @bind="vehicleDTO.Capacity" step="0.01">
+                    </div>
 
-                <div class="form-group col-5">
-                    <label for="chauffeurName" class="form-label">Chauffeur Name</label>
-                    <input type="text" class="form-control" id="chauffeurName" @bind="vehicleDTO.ChauffeurName">
+                    <div class="form-group col-5">
+                        <label for="technicDetail" class="form-label">Technical Details</label>
+                        <input type="text" class="form-control" id="technicDetail" @bind="vehicleDTO.TechnicDetail">
+                    </div>
+
+                    <div class="form-group col-5">
+                        <label for="plateNumber" class="form-label">Plate Number</label>
+                        <input type="text" class="form-control" id="plateNumber" @bind="vehicleDTO.PlateNumber">
+                    </div>
+
+                    <div class="form-group col-5">
+                        <label for="chauffeurName" class="form-label">Chauffeur Name</label>
+                        <input type="text" class="form-control" id="chauffeurName" @bind="vehicleDTO.ChauffeurName">
+                    </div>
+
+                    <ValidationSummary></ValidationSummary>
+                    <br /><br />
+                    <button type="submit" class="btn btn-primary">Update Vehicle</button>
                 </div>
-               
-                <ValidationSummary></ValidationSummary>
-                <br /><br />
-                <button type="submit" class="btn btn-primary">Update Vehicle</button>
             </div>
         </div>
-    </div>
     </EditForm>
 }
 else
@@ -68,7 +70,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         string? role = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
-       .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+      .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
 
         Roles = role;
         if (int.TryParse(_navigationManager.Uri.Split('/').Last(), out int parsedVehicleId))

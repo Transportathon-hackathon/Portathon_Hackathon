@@ -7,10 +7,10 @@
 @inject ILocalStorageService _localStorage
 @inject AuthenticationStateProvider _authenticationStateProvider
 @inject IToastService _toastService
-
+@inject ICompanyManager _companyManager
 <div class="container">
     <div class="row justify-content-center">
-        
+
         <div class="col-md-6">
             <!-- Logo or Image -->
             <div class="text-center mb-4">
@@ -65,6 +65,7 @@
 
 @code {
     string? Role = "";
+    int userId { get; set; }
     UserLogin user = new UserLogin();
     private string message = string.Empty;
     public string ReturnPath { get; set; }
@@ -74,25 +75,27 @@
         if (result.Success)
         {
 
-          
+
 
             var absoluteUri = new Uri(_navigationManager.Uri);
             var queryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
             ReturnPath = queryParam["returnUrl"];
             await _localStorage.SetItemAsync("authToken", result.Data);
             await _authenticationStateProvider.GetAuthenticationStateAsync();
+
             string? role = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Claims
          .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
-            Console.WriteLine(role);
+
             Role = role;
 
             if (string.IsNullOrEmpty(ReturnPath))
             {
-                if(role =="Company")
+                
+                if (role == "Company")
                 {
-                    _navigationManager.NavigateTo("/Company/Home");
+                    CheckCompanyCreatedOrNot();
                 }
-                if(role == "User")
+                if (role == "User")
                 {
                     _navigationManager.NavigateTo("/User/Home");
                 }
@@ -109,4 +112,20 @@
         }
 
     }
+    private async Task CheckCompanyCreatedOrNot()
+    {
+        string? id = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+
+        userId = Convert.ToInt32(id);
+        var result = await _companyManager.CheckCompany(userId);
+        if(result.Data == true)
+        {
+            _navigationManager.NavigateTo("/Company/Home");
+        }
+        else
+        {
+            _navigationManager.NavigateTo("/Company/CreateCompany");
+        }    }
 }
+

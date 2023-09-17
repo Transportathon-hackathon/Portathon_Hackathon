@@ -13,13 +13,18 @@ namespace Portathon_Hackathon.Shared.Entities
         [Key]
         public int RequestId { get; set; }
         public int VehicleId { get; set; }
+        [JsonIgnore]
         public Vehicle Vehicle { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime ReservationDate { get; set; }
 
-        public int UserId { get; set; } 
+        public int UserId { get; set; }
+        [JsonIgnore]
+
         public User User { get; set; }  
         public string RequestType { get; set; } 
+
         public string RequestDetail { get; set; }   
         public string ContactConfirmation { get; set; } 
 

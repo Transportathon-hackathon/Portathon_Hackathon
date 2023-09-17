@@ -21,6 +21,7 @@ namespace Portathon_Hackathon.Shared.DTO
             public decimal EvaluationScore { get; set; }
             public string ImageUrl { get; set; }
             public int VehicleId { get; set; }
+            public int CompanyId { get; set; }
     }
 
 }

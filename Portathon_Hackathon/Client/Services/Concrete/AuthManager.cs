@@ -29,19 +29,31 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             return (await _stateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
         }
 
+
+     
+
         public async Task<ServiceResponse<string>> Login(UserLogin user)
         {
             var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Auth/login", user);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
-        public async Task<ServiceResponse<int>> Register(UserRegister request)
-        {
-            var deneme = _httpClient.BaseAddress;
-            var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Auth/register", request);
-            return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
 
+        public async Task<ServiceResponse<int>> CreateUser(UserRegister registerModel) {
+            var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Auth", registerModel);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+        
         }
+
+
+
+        //public async Task<ServiceResponse<int>> Register(UserRegister request)
+        //{
+        //    var deneme = _httpClient.BaseAddress;
+        //    var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Auth/register", request);
+        //    return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+
+        //}
 
 
         public async Task Logout()

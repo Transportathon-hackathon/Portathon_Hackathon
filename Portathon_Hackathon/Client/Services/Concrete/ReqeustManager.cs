@@ -20,22 +20,20 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             var result = await _httpClient.DeleteAsync($"https://localhost:7237/api/Request?requestId={requestId}");
             return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
-
         public async Task<ServiceResponse<List<RequestDTO>>> GetAllRequestByUserId(int userId)
-        {
-            var result = await _httpClient.GetAsync($"https://localhost:7237/api/Request{userId}");
+        {                 
+            var result = await _httpClient.GetAsync($"https://localhost:7237/getrequestsbyuserid?userId={userId}");
             return await result.Content.ReadFromJsonAsync<ServiceResponse<List<RequestDTO>>>();
         }
-
         public async Task<ServiceResponse<RequestDTO>> MakeRequest(RequestDTO dto)
         {
             var result = await _httpClient.PostAsJsonAsync("https://localhost:7237/api/Request", dto);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<RequestDTO>>();
         }
 
-        public async Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updatedId, RequestDTO dto)
+        public Task<ServiceResponse<RequestDTO>> UpdateYourRequest(int updateId, RequestDTO dto)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

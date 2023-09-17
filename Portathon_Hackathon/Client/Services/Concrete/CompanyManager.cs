@@ -15,7 +15,12 @@ namespace Portathon_Hackathon.Client.Services.Concrete
             _httpClient = httpClient;
         }
 
-
+        public async Task<ServiceResponse<bool>> CheckCompany(int userId)
+        {
+                                                      
+            var result = await _httpClient.GetAsync($"https://localhost:7237/api/Company/checkcompany?userId={userId}");
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        }
 
         public async Task<ServiceResponse<CompanyDTO>> CreateCompany(CompanyDTO model)
         {

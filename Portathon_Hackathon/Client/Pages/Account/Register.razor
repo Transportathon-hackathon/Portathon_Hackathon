@@ -3,11 +3,9 @@
 @using Portathon_Hackathon.Shared.Entities;
 @inject IAuthManager _authManager
 @inject NavigationManager _navigationManager
+@inject IToastService _toastrService
 @using Microsoft.AspNetCore.Components.Forms
 
-@{
-    
-}
 
 <div class="container">
     <div class="row justify-content-center">
@@ -26,36 +24,39 @@
             </div>
 
 
-            <EditForm Model="user" OnValidSubmit="HandleRegistration">
-                <DataAnnotationsValidator></DataAnnotationsValidator>
+            <EditForm Model="userRegister" OnValidSubmit="HandleRegistration">
                 <!-- Name input -->
                 <div class="form-group">
                     <label for="Email" class="form-label">Email</label>
-                    <InputText type="email" id="registerName" @bind-Value="user.Email" class="form-control" />
+                    <InputText type="email" id="registerName" @bind-Value="userRegister.Email" class="form-control" />
                 </div>
                 
                 <!-- Username input -->
                 <div class="form-group">
                     <label for="registerUsername" class="form-label">Username</label>
-                    <InputText type="text" id="registerUsername" @bind-Value="user.Username" class="form-control" />
+                    <InputText type="text" id="registerUsername" @bind-Value="userRegister.Username" class="form-control" />
                 </div>
 
                 <!-- Password input -->
                 <div class="form-group">
                     <label for="registerPassword" class="form-label">Password</label>
-                    <InputText type="password" id="registerPassword" @bind-Value="user.Password" class="form-control" />
+                    <InputText type="password" id="registerPassword" @bind-Value="userRegister.Password" class="form-control" />
                 </div>
               
                 <!-- Repeat Password input -->
                 <div class="form-group">
                     <label for="registerRepeatPassword" class="form-label">Repeat password</label>
-                    <InputText type="password" id="registerRepeatPassword" @bind-Value="user.ConfirmPassword" class="form-control" />
+                    <InputText type="password" id="registerRepeatPassword" @bind-Value="userRegister.ConfirmPassword" class="form-control" />
                 </div>
+                <div class="form-group">
+                    <label for="registerRepeatPassword" class="form-label">Choose Role</label>
 
-                <InputSelect class="form-control" @bind-Value="user.UserType">
-                    <option value="0">User</option>
-                    <option value="1">Company</option>
-                </InputSelect>
+                    <InputSelect class="form-control" @bind-Value="userRegister.UserType">
+                        <option value="0">User</option>
+                        <option value="1">Company</option>
+                    </InputSelect>
+                </div>
+            
                 <!-- Checkbox -->
                 <div class="form-check d-flex justify-content-center mb-4">
                     <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
@@ -71,7 +72,6 @@
                     <button type="submit" class="btn btn-primary btn-block mb-3">Sign Up</button>
                     <p>Are you already a member? <a href="/Account/Login">Sign in</a></p>
                 </div>
-                <ValidationSummary></ValidationSummary>
             </EditForm>
         </div>
     </div>
@@ -81,18 +81,32 @@
 
 
 @code {
-    UserRegister user = new UserRegister();
+    UserRegisterModel userRegister = new UserRegisterModel();
 
-   
+
     private async Task HandleRegistration()
     {
-        var result = await _authManager.Register(user);
+        UserRegister user = new UserRegister
+            {
+                ConfirmPassword = userRegister.ConfirmPassword,
+                Email = userRegister.Email,
+                Username = userRegister.Username,
+                Password = userRegister.Password,
+                UserType = userRegister.UserType.ToString(),
+            };
+
+
+
+
+        var result = await _authManager.CreateUser(user);
         if (result.Success == false)
         {
+
+            _toastrService.ShowError(result.Message);
         }
         else
         {
-            _navigationManager.NavigateTo("login");
+            _navigationManager.NavigateTo("Account/Login");
 
         }
         if (!result.Success)

@@ -13,12 +13,13 @@ namespace Portathon_Hackathon.Server.Services.Concrete
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
-
-        public ReservationService(ApplicationDbContext context,IMapper mapper,IRequestService requestService)
+        private readonly IUserService _userService;
+        public ReservationService(ApplicationDbContext context,IMapper mapper,IRequestService requestService, IUserService userService)
         {
             _context = context;  
             _mapper = mapper;
             _requestService = requestService;
+            _userService = userService;
         }
         public async Task<ServiceResponse<Reservation>> CreateReservation(ReservationDTO reservationDTO)
         {
@@ -83,30 +84,25 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             .Include(opt => opt.Request)
             .ThenInclude(opt => opt.Vehicle)
             .Include(opt => opt.Request)
-            .ThenInclude(opt => opt.User)  
+            .ThenInclude(opt => opt.User)
             .FirstOrDefaultAsync();
 
 
-            if (reservation == null)
-            {
-                return new ServiceResponse<ReservationReturnDTO>
-                {
-                    Data = null,
-                    Success = false,
-                    Message = "There is no reservation with this id"
-                };
-            }
             var objDTO = _mapper.Map<ReservationReturnDTO>(reservation);
+            objDTO.CompanyId = reservation.Request.Vehicle.CompanyId;
+            objDTO.IsFinished = reservation.IsReservationFinish;
             return new ServiceResponse<ReservationReturnDTO>
             {
                 Data = objDTO,
                 Success = true,
                 Message = "Reservation is getted"
+
             };
         }
 
-        public async Task<ServiceResponse<List<ReservationReturnDTO>>> GetReservationByUserId(int userId)
+        public async Task<ServiceResponse<List<ReservationReturnDTO>>> GetReservationByUserId()
         {
+            var userId = _userService.GetUserId();
             var reservation = await _context.Reservations
               .Where(opt => opt.Request.UserId == userId)
               .Include(opt => opt.Request)
@@ -114,7 +110,15 @@ namespace Portathon_Hackathon.Server.Services.Concrete
               .Include(opt => opt.Request)
               .ThenInclude(opt => opt.User)
               .ToListAsync();
-
+            //List<Reservation> reservations = new List<Reservation>();
+            //foreach (var item in reservations)
+            //{
+            //    Reservation _reservation = new Reservation();
+            //    if (item.IsReservationFinish == false)
+            //    {
+            //        reservations.Add(_reservation);
+            //    }
+            //}
 
             var reservationDto = _mapper.Map<List<ReservationReturnDTO>>(reservation);
             

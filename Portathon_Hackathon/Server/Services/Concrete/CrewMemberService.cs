@@ -42,8 +42,8 @@ namespace Portathon_Hackathon.Server.Services.Concrete
         public async Task<ServiceResponse<string>> DeleteCrewMemberById(int crewMemberId)
         {
             var crew = await _context.CrewMembers.Where(opt => opt.Id == crewMemberId).FirstOrDefaultAsync();
-        
-            if(crew != null)
+
+            if (crew != null)
             {
                 _context.CrewMembers.Remove(crew);
                 await _context.SaveChangesAsync();
@@ -60,17 +60,17 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = false,
                 Message = "An error occured while deting the crew member"
             };
-                
-                
+
+
         }
 
         public async Task<ServiceResponse<List<CrewMemberDTO>>> GetAllCrewMemberByVehicleId(int vehicleId)
         {
-            var crewList =await _context.CrewMembers.Where(opt => opt.VehicleId == vehicleId).ToListAsync();
-     
+            var crewList = await _context.CrewMembers.Where(opt => opt.VehicleId == vehicleId).ToListAsync();
+
             var crewDTO = _mapper.Map<List<CrewMemberDTO>>(crewList);
 
-            if(crewDTO == null)
+            if (crewDTO == null)
             {
                 return new ServiceResponse<List<CrewMemberDTO>>
                 {

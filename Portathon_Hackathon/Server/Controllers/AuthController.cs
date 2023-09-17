@@ -18,8 +18,9 @@ namespace Portathon_Hackathon.Server.Controllers
             _authService = authService;
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult<ServiceResponse<int>>> CreateRegister(UserRegister user)
+
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<int>>> CreateUser(UserRegister user)
         {
             var result = await _authService.Register(new User
             {
@@ -30,6 +31,21 @@ namespace Portathon_Hackathon.Server.Controllers
             }, user.Password);
             return Ok(result);
         }
+
+
+
+        //[HttpPost("register")]
+        //public async Task<ActionResult<ServiceResponse<int>>> CreateRegister(UserRegister user)
+        //{
+        //    var result = await _authService.Register(new User
+        //    {
+        //        UserType = user.UserType.ToString(),
+        //        Email = user.Email,
+        //        Username = user.Username,
+
+        //    }, user.Password);
+        //    return Ok(result);
+        //}
 
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin user)

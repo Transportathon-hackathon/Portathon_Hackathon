@@ -35,7 +35,7 @@
             {
                 <div class="container bcontent mt-4 bg-light">
                     <div class="card">
-                        <div class="card-body text-end"> 
+                        <div class="card-body text-end">
 
                             <button type="button" class="btn btn-danger btn-sm " @onclick="() => ConfirmDelete(item.VehicleId)">
                                 <i class="fas fa-trash"></i> Delete
@@ -45,7 +45,7 @@
                             </button>
                         </div>
 
-                        <div class="card-body">   
+                        <div class="card-body">
                             <h5 class="card-title text-center"> <strong> Details About The Vehicle </strong></h5>
                             <div class="col-sm-5 text-center">
                                 <img class="card-img" src="/image/vehicles/@item.ImageUrl" alt="Suresh Dasari Card">
@@ -83,7 +83,8 @@
         Console.WriteLine(message);
     }
 
-}else
+}
+else
 {
     <_accessDenied></_accessDenied>
 }
@@ -102,19 +103,19 @@
 
         Roles = role;
         var resultCompanyId = await _companyManager.GetCompanyId();
-        int  companyId = resultCompanyId.Data;
-      
+        int companyId = resultCompanyId.Data;
+
 
         var result = await _companyManager.GetCompanyById(companyId);
-       
-        if(result.Success == true)
+
+        if (result.Success == true)
         {
             _company = result.Data;
         }
         else
         {
             message = result.Message;
-        } 
+        }
     }
     private async Task ConfirmDelete(int vehicleId)
     {
@@ -131,7 +132,7 @@
     {
         var resultDelVehicle = await _vehicleService.DeleteVehicle(vehicleId);
         messageDelete = resultDelVehicle.Message;
-        if(resultDelVehicle.Success == true)
+        if (resultDelVehicle.Success == true)
         {
             _toastService.ShowSuccess(messageDelete);
             await OnInitializedAsync();

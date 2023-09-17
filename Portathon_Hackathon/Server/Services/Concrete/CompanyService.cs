@@ -18,6 +18,41 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             _context = context;
         }
 
+        public  async Task<ServiceResponse<bool>> CompanyCreatedOrNot(int userId)
+        {
+            var user =await _context.Users.Where(opt => opt.Id == userId).FirstOrDefaultAsync();
+
+            if(user.UserType == "Company")
+            {
+                var company =_context.Companies.Where(opt => opt.UserId == userId).Any();
+                if(company ==true)
+                {
+                    return new ServiceResponse<bool>
+                    {
+                        Data = true,
+                        Message = "You already created your account!",
+                        Success = true
+                    };
+                }
+                else
+                {
+
+                    return new ServiceResponse<bool>
+                    {
+                        Data = false,
+                        Success = false,
+                        Message = "Should complete the company create operation!"
+                    };
+                }
+            }
+            return new ServiceResponse<bool>
+            {
+                Data = false,
+                Success = false,
+                Message = "User type can not create a company"
+            }; ;
+        }
+
         public async Task<ServiceResponse<CompanyDTO>> CreateCompany(CompanyDTO request)
         {
             var objDTO = _mapper.Map<Company>(request);

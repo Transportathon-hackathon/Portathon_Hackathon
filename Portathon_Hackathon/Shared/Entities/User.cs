@@ -17,10 +17,11 @@ namespace Portathon_Hackathon.Shared.Entities
         public byte[] PasswordSalt { get; set; }
         public byte[] PasswordHash { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-        public string UserType { get; set; }
+        public string UserType { get; set; } = "User";
         [JsonIgnore]
         public Company Company { get; set; }
-        public List<Request> Requests { get; set; } 
+        public List<Request> Requests { get; set; }
+        public List<Message> Messages { get; set; }
     }
 
    

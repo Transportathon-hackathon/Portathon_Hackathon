@@ -32,11 +32,11 @@ namespace Portathon_Hackathon.Server.Controllers
             var response = await _requestService.GetRequest(requstId);
             return Ok(response);
         }
-        [HttpGet("/getall")]
-        public async Task<ActionResult> GetAllRequests()
+        [HttpGet("/getrequestsbyuserid")]
+        public async Task<ActionResult> GetAllRequestsByUserId(int userId)
         {
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var response = await _requestService.GetAllRequest(Convert.ToInt32(userId));
+            
+            var response = await _requestService.GetAllRequest(userId);
             return Ok(response);
         }
 
@@ -51,6 +51,12 @@ namespace Portathon_Hackathon.Server.Controllers
         {
             var response = await _requestService.UpdateRequest(requestId, requestDTO);
             return Ok(response);
+        }
+        [HttpGet("GetCompanyRequest")]
+        public async Task<ActionResult> GetAllRequest(int companyId)
+        {
+            var result = await _requestService.RequestForCompanyList(companyId);
+            return Ok(result);  
         }
     }
 }

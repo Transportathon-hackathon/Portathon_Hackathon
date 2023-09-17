@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body text-end">
 
-                <button type="button" class="btn btn-danger btn-sm " @onclick="() => AddCrevMember(vehicleId,crew)" >
+                <button type="button" class="btn btn-danger btn-sm " @onclick="() => AddCrevMember(vehicleId,crew)">
                     <i class="fas fa-plus"></i> Add Crew Member
                 </button>
             </div>
@@ -40,7 +40,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>MemberName:</strong> <span id="MemberName">@item.MemberName</span></li>
                     </ul>
-                    <div class="text-end"> 
+                    <div class="text-end">
                         <button type="button" class="btn btn-danger btn-sm " @onclick="() => DeleteCrevMember(item.Id)">
                             <i class="fas fa-trash"></i> Delete
                         </button>
@@ -76,7 +76,7 @@ else
 @code {
     string? Roles = "";
     [Parameter]
-    public int vehicleId{ get; set; }
+    public int vehicleId { get; set; }
     VehicleDTO vehicle = new VehicleDTO();
     CrewMemberDTO crew = new CrewMemberDTO();
 
@@ -89,7 +89,7 @@ else
     {
         var result = await _crewMember.DeleteCrewMemberById(id);
 
-        if(result.Success == true)
+        if (result.Success == true)
         {
 
             crewMemberDTO.RemoveAll(opt => opt.Id == id);
@@ -104,7 +104,7 @@ else
 
     }
 
-    private  async Task AddCrevMember(int vechicleId, CrewMemberDTO dto)
+    private async Task AddCrevMember(int vechicleId, CrewMemberDTO dto)
     {
         AddMember = true;
     }
@@ -113,9 +113,9 @@ else
     private async Task CompleteAddOperation(int vechicleId, CrewMemberDTO dto)
     {
 
-        var result =await _crewMember.AddCrewMemberToVehicle(vechicleId, dto);
+        var result = await _crewMember.AddCrewMemberToVehicle(vechicleId, dto);
 
-        if(result.Success == true)
+        if (result.Success == true)
         {
             crewMemberDTO.Add(dto);
             _toastService.ShowSuccess(result.Message);
@@ -141,14 +141,14 @@ else
         {
             vehicleId = parsedVehicleId;
         }
-        var resultVehcileDTO =await _vehicleService.GetVehicleById(vehicleId);
+        var resultVehcileDTO = await _vehicleService.GetVehicleById(vehicleId);
         var resultCrews = await _crewMember.GetAllCrewMembersByVehicleId(vehicleId);
-        if(resultCrews.Data != null)
+        if (resultCrews.Data != null)
         {
             crewMemberDTO = resultCrews.Data;
         }
 
-        if(resultVehcileDTO.Data != null)
+        if (resultVehcileDTO.Data != null)
         {
             vehicle = resultVehcileDTO.Data;
         }

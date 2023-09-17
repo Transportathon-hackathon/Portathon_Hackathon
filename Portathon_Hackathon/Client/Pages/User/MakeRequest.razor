@@ -1,7 +1,8 @@
-﻿@page "/User/Request/{vehicleId:int}"
+﻿@page "/User/MakeRequest/{vehicleId:int}"
 @inject IRequestManager _requestManager;
 @inject IToastService _toastService;
 @inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authStateProvider
 <EditForm Model="requestDTO" OnValidSubmit="CreateRequestHandleAsync">
 
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -31,7 +32,7 @@
                 </div>
                 <ValidationSummary></ValidationSummary>
                 <br /><br />
-                <button type="submit" class="btn btn-primary">Update Vehicle</button>
+                <button type="submit" class="btn btn-primary">Make Request</button>
             </div>
         </div>
     </div>
@@ -44,6 +45,7 @@
     [Parameter]
     public int vehicleId { get; set; }
 
+    private int userId { get; set; } 
 
     protected override void OnInitialized()
     {
@@ -55,13 +57,18 @@
     private  async Task CreateRequestHandleAsync()
     {
         requestDTO.VehicleId = vehicleId;
+        
+        string? id = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+        .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value;
 
+        userId = Convert.ToInt32(id);
+        
         var result =await _requestManager.MakeRequest(requestDTO);
 
-        if(result.Success = true)
+        if(result.Success == true)
         {
             _toastService.ShowSuccess(result.Message);
-            _navigationManager.NavigateTo("/Users/Requests");
+            _navigationManager.NavigateTo($"/User/Requests/{userId}");
             _toastService.ShowSuccess(result.Message);
         }
         else

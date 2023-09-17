@@ -11,6 +11,7 @@ namespace Portathon_Hackathon.Server.Controllers
     [ApiController]
     public class CrewMemberController : ControllerBase
     {
+
         private readonly ICrewMemberService _crewMemberService;
         public CrewMemberController(ICrewMemberService crewMemberService)
         {
@@ -31,9 +32,9 @@ namespace Portathon_Hackathon.Server.Controllers
         [HttpGet("getallcrewsbyvehicleId")]
         public async Task<ActionResult> GetAllCrewMemberByVehicleId(int vehicleId)
         {
-            var result =await _crewMemberService.GetAllCrewMemberByVehicleId(vehicleId);
+            var result = await _crewMemberService.GetAllCrewMemberByVehicleId(vehicleId);
 
-            if(result.Success == true)
+            if (result.Success == true)
             {
                 return Ok(result);
             }
@@ -43,9 +44,9 @@ namespace Portathon_Hackathon.Server.Controllers
         [HttpDelete("delete")]
         public async Task<ActionResult> DeleteCrewMemberById(int id)
         {
-            var result =await _crewMemberService.DeleteCrewMemberById(id);
+            var result = await _crewMemberService.DeleteCrewMemberById(id);
 
-            if(result.Success == true)
+            if (result.Success == true)
             {
                 return Ok(result);
             }

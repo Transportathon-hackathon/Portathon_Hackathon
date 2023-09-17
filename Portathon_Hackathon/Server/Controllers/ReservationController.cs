@@ -30,10 +30,10 @@ namespace Portathon_Hackathon.Server.Controllers
             return Ok(response);
         }
 
-        [HttpGet("getreservationbyuserid")]
-        public async Task<ActionResult> GetReservationByUserId(int userId)
+        [HttpGet("GetReservationByUserId")]
+        public async Task<ActionResult> GetReservationByUserId()
         {
-            var response = await _reservationService.GetReservationByUserId(userId);
+            var response = await _reservationService.GetReservationByUserId();
 
             return Ok(response);
         }

@@ -1,0 +1,133 @@
+﻿@page "/MessagePage"
+@inject IMessageManager _messageManager;
+@inject AuthenticationStateProvider _authStateProvider
+@inject IJSRuntime _jsRuntime
+<section style="background-color: #eee;">
+    <div class="container py-5">
+
+        <div class="row">
+
+            <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
+
+                <h5 class="font-weight-bold mb-3 text-center text-lg-start">Member</h5>
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var item in _model)
+                            {
+                                <li class="p-2 border-bottom">
+                                    <button @onclick="() => SaveReceiver(item.ReceiverId)" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp" alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
+                                            <div class="pt-1">
+                                                <p class="fw-bold mb-0">@item.AliasName</p>
+                                                <p class="small text-muted">Lorem ipsum dolor sit.</p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <p class="small text-muted mb-1">5 mins ago</p>
+                                        </div>
+                                    </button>
+                                </li>
+
+                            }
+              
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6 col-lg-7 col-xl-8">
+
+                <ul class="list-unstyled">
+                    @foreach (var item in _messagesList)
+                    {
+                       @if (item.SenderId == ownerSessionId)
+                        {
+                            <li class="d-flex justify-content-end mb-4" >
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between p-3">
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0">
+                                            @item.Content
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="d-flex justify-content-start mb-4" >
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between p-3">
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0">
+                                            @item.Content
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                     
+
+                    }
+                    <EditForm Model="_message" OnValidSubmit="CreateMessage" >
+                        <li class="bg-white mb-3">
+                            <div class="form-outline">
+                                <InputTextArea class="form-control" id="textAreaExample2" rows="4" @bind-Value="_message.Content"></InputTextArea>
+                                <label class="form-label" for="textAreaExample2">Message</label>
+                            </div>
+                        </li>
+                        <button type="submit" class="btn btn-info btn-rounded float-end">Send</button>
+
+                    </EditForm>
+                 
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@code {
+    private List<SuitableMessageModel> _model = new List<SuitableMessageModel>();
+    MessageDTO _message = new MessageDTO();
+    List<MessageDTO> _messagesList = new List<MessageDTO>();
+    private int ReceiverId { get; set; }
+    private int ownerSessionId {get; set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await _messageManager.GetSuitableMessageAsync();
+        string? userId = (await _authStateProvider.GetAuthenticationStateAsync()).User.Claims
+       .FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+        ownerSessionId = int.Parse(userId);
+    }
+    async Task SaveReceiver(int receiverId)
+    {
+        ReceiverId = receiverId;
+        _messagesList = await _messageManager.GetMessageSpecificUser(receiverId);
+    }
+    public async Task CreateMessage()
+    {
+        _message.ReceiverId = ReceiverId;
+        var response = await _messageManager.SendMessage(_message);
+        if (response.Data != null)
+        {
+
+            _messagesList = response.Data.OrderBy(x => x.TimeSpan).ToList();
+
+        }
+    }
+
+   
+}

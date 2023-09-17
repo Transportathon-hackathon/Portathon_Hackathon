@@ -16,8 +16,7 @@ namespace Portathon_Hackathon.Shared.Entities
         public string ReservationCase { get; set; }
         public DateTime ReservationDate { get; set; } = DateTime.Now;      
         public string OtherDetails { get; set; }
+        public bool IsReservationFinish { get; set; } = false;
         public Request Request { get; set; }
-        [JsonIgnore]
-        public Evaluation Evaluation { get; set; }
     }
 }

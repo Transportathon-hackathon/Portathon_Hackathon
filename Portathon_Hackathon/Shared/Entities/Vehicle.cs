@@ -24,7 +24,6 @@ namespace Portathon_Hackathon.Shared.Entities
         [JsonIgnore]
         public Company Company { get; set; }
 
-
         [JsonIgnore]
         public List<Request> requests { get; set; }
         public List<CrewMember> CrewMembers { get; set; }

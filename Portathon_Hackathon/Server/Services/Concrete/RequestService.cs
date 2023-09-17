@@ -17,9 +17,9 @@ namespace Portathon_Hackathon.Server.Services.Concrete
             _mapper = mapper;
         }
 
-        public bool UserAlreadyRequested(int VehicleId)
+        public bool UserAlreadyRequested(int VehicleId,int userId)
         {
-            var vehicle = _context.Requests.Any(opt => opt.VehicleId == VehicleId);
+            var vehicle = _context.Requests.Any(opt => opt.VehicleId == VehicleId && opt.UserId == userId);
             if (vehicle == true)
             {
                 return true;
@@ -30,7 +30,7 @@ namespace Portathon_Hackathon.Server.Services.Concrete
         {
             var request = _mapper.Map<Request>(requestDto);
             request.UserId = userId;
-            if (UserAlreadyRequested(requestDto.VehicleId) == true)
+            if (UserAlreadyRequested(requestDto.VehicleId,userId) == true)
             {
                 return new ServiceResponse<RequestDTO>
                 {
@@ -118,5 +118,30 @@ namespace Portathon_Hackathon.Server.Services.Concrete
                 Success = true
             };
         }
+
+        public async Task<ServiceResponse<List<Request>>> RequestForCompanyList(int companyId)
+        {
+            ServiceResponse<List<Request>> _response = new ServiceResponse<List<Request>>();
+            var response = await _context.Requests
+                .Include(x=>x.Vehicle)
+                .ThenInclude(x=>x.Company)
+                .Where(x => x.Vehicle.CompanyId == companyId).ToListAsync();
+            if (!response.Any())
+            {
+                _response.Success = false;
+                _response.Message = "Your company is not any request";
+                return _response;
+            }
+
+            _response.Success = true;
+            _response.Data = response;
+            return _response;
+        
+        }
+
+
+
+
+
     }
 }

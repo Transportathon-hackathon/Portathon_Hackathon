@@ -12,5 +12,6 @@ namespace Portathon_Hackathon.Server.Services.Abstract
         public Task<ServiceResponse<List<RequestDTO>>> GetAllRequest(int userId);
         public Task<ServiceResponse<RequestDTO>> GetRequest(int requestId);
         public  Task<ServiceResponse<RequestDTO>> UpdateRequest(int requestId, RequestDTO requestUpdate);
+        public Task<ServiceResponse<List<Request>>> RequestForCompanyList(int companyId);
     }
 }
